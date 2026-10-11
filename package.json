@@ -1,0 +1,7 @@
+{
+  "name": "rentify",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Rentify: a platform for renting items short-term",
+  "scripts": {}
+}
