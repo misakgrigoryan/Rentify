@@ -7,6 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  MODERATOR
+  SUPER_ADMIN
+}
+
+enum Currency {
+  AMD
+  USD
+  EUR
+  RUB
+}
+
+enum PricingUnit {
+  DAY
+  HOUR
+}
+
+enum ListingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  ACTIVE
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
 model User {
   id           Int      @id @default(autoincrement())
   email        String   @unique
@@ -15,8 +48,88 @@ model User {
   phone        String?
   language     String   @default("en")
   avatarUrl    String?
-  role         String   @default("USER")
+  role         Role     @default(USER)
   isBanned     Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  listings     Listing[]
+  bookings     Booking[]  @relation("Renter")
+  reviewsGiven Review[]   @relation("Reviewer")
+  reviewsGot   Review[]   @relation("Reviewed")
+  messagesSent Message[]
+}
+
+model Listing {
+  id          Int           @id @default(autoincrement())
+  title       String
+  description String
+  price       Decimal       @db.Decimal(10, 2)
+  currency    Currency
+  unit        PricingUnit
+  category    String
+  location    String
+  imageUrls   String[]
+  status      ListingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  owner    User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId  Int
+
+  bookings Booking[]
+  reviews  Review[]
+
+  @@index([category])
+  @@index([location])
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  status    BookingStatus @default(PENDING)
+  message   String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId Int
+
+  renter    User    @relation("Renter", fields: [renterId], references: [id], onDelete: Cascade)
+  renterId  Int
+
+  review    Review?
+
+  @@index([listingId, startDate, endDate])
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  booking    Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId  Int      @unique
+
+  listing    Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  listingId  Int
+
+  reviewer   User     @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId Int
+
+  reviewed   User     @relation("Reviewed", fields: [reviewedId], references: [id], onDelete: Cascade)
+  reviewedId Int
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  body       String
+  createdAt  DateTime @default(now())
+
+  sender     User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   Int
+
+  receiverId Int
 }
