@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Design tokens from the Rentify design spec */
+@theme {
+  --font-sans: "Noto Sans", system-ui, sans-serif;
+  --color-primary: #0e7c66;
+  --color-primary-hover: #0a6252;
+  --color-accent: #f59e0b;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-info: #2563eb;
+}
