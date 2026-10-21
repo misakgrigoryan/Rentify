@@ -108,3 +108,8 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+
+// Returns the user that requireAuth loaded from the token
+export const getMe = (req, res) => {
+  res.json({ user: req.user });
+};
