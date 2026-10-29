@@ -89,7 +89,7 @@ export default function Dashboard() {
         {tabs.map((t) => (
           <button
             key={t}
-            onClick={() => { setTab(t); setMessage(""); }}
+            onClick={() => { setTab(t); setItems([]); setStatus("loading"); setMessage(""); }}
             className={`whitespace-nowrap px-4 py-2 text-sm font-semibold ${
               tab === t ? "border-b-2 border-primary text-primary" : "text-muted"
             }`}
