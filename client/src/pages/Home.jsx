@@ -1,11 +1,22 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button.jsx";
 import ListingCard from "../components/listing/ListingCard.jsx";
-import { listings } from "../data/listings.js";
+import api from "../lib/api.js";
 
 const categories = ["Tools", "Drones", "Projectors", "Sports", "Costumes"];
 
 export default function Home() {
+  const [featured, setFeatured] = useState([]);
+
+  // Load the 4 newest listings from the API
+  useEffect(() => {
+    api
+      .get("/listings", { params: { limit: 4 } })
+      .then((res) => setFeatured(res.data.listings))
+      .catch(() => setFeatured([]));
+  }, []);
+
   return (
     <div>
       <section className="bg-primary px-4 py-16 text-white">
@@ -42,11 +53,15 @@ export default function Home() {
 
       <section className="mx-auto max-w-6xl px-4 pb-10">
         <h2 className="text-2xl font-semibold">Featured listings</h2>
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {listings.slice(0, 4).map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
-          ))}
-        </div>
+        {featured.length === 0 ? (
+          <p className="mt-4 text-muted">No listings yet. Be the first to add one.</p>
+        ) : (
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((listing) => (
+              <ListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pb-16">
