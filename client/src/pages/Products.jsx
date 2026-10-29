@@ -1,21 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ListingCard from "../components/listing/ListingCard.jsx";
 import Input from "../components/ui/Input.jsx";
-import { listings } from "../data/listings.js";
+import api from "../lib/api.js";
 
-// Filters the sample listings by name and category.
-// Week 4 will move this filtering to the backend.
+const categories = ["All", "Tools", "Drones", "Projectors", "Sports", "Costumes"];
+
 export default function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [listings, setListings] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const categories = ["All", ...new Set(listings.map((l) => l.category))];
+  // Runs again whenever the search text or category changes
+  useEffect(() => {
+    setLoading(true);
+    const params = {};
+    if (search) params.search = search;
+    if (category !== "All") params.category = category;
 
-  const results = listings.filter((item) => {
-    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = category === "All" || item.category === category;
-    return matchesSearch && matchesCategory;
-  });
+    api
+      .get("/listings", { params })
+      .then((res) => {
+        setListings(res.data.listings);
+        setTotal(res.data.total);
+        setError("");
+      })
+      .catch(() => setError("Could not load listings"))
+      .finally(() => setLoading(false));
+  }, [search, category]);
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
@@ -47,12 +61,15 @@ export default function Products() {
         </aside>
 
         <div>
-          <p className="mb-3 text-sm text-muted">{results.length} items found</p>
-          {results.length === 0 ? (
+          {error && <p className="mb-3 rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</p>}
+          <p className="mb-3 text-sm text-muted">
+            {loading ? "Loading..." : `${total} items found`}
+          </p>
+          {!loading && listings.length === 0 ? (
             <p className="rounded-xl bg-surface p-6 text-muted">No items match your search.</p>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {results.map((listing) => (
+              {listings.map((listing) => (
                 <ListingCard key={listing.id} listing={listing} />
               ))}
             </div>
