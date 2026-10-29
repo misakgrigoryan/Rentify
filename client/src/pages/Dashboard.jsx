@@ -26,7 +26,6 @@ export default function Dashboard() {
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
 
-  // Reload the right data whenever the tab changes
   useEffect(() => {
     if (!user) return;
     setStatus("loading");
@@ -77,7 +76,6 @@ export default function Dashboard() {
     );
   }
 
-  // Split the bookings by tab
   const visible =
     tab === "Active" ? items.filter((b) => ACTIVE.includes(b.status))
     : tab === "Finished" ? items.filter((b) => FINISHED.includes(b.status))
@@ -159,6 +157,11 @@ export default function Dashboard() {
                 )}
                 {tab !== "Requests" && (b.status === "PENDING" || b.status === "ACCEPTED") && (
                   <Button size="sm" variant="secondary" onClick={() => changeBooking(b.id, "CANCELLED")}>Cancel</Button>
+                )}
+                {tab === "Finished" && b.status === "COMPLETED" && user.id === b.renterId && (
+                  <Link to={`/review/${b.id}`}>
+                    <Button size="sm" variant="secondary">Leave a review</Button>
+                  </Link>
                 )}
               </div>
             </div>
