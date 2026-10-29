@@ -10,6 +10,7 @@ import AddListing from "./pages/AddListing.jsx";
 import ReviewPage from "./pages/ReviewPage.jsx";
 import Profile from "./pages/Profile.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Admin from "./pages/Admin.jsx";
 import Messages from "./pages/Messages.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/review/:bookingId" element={<ReviewPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="*" element={<NotFound />} />
       </Route>

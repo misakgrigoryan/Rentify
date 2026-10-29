@@ -11,6 +11,9 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const isAdmin = user?.role === "SUPER_ADMIN" || user?.role === "MODERATOR";
+  const navLinks = isAdmin ? [...links, { to: "/admin", label: "Admin" }] : links;
+
   function handleLogout() {
     logout();
     navigate("/");
@@ -19,12 +22,10 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="text-xl font-bold text-primary">
-          Rentify
-        </Link>
+        <Link to="/" className="text-xl font-bold text-primary">Rentify</Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          {links.map((link) => (
+          {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -46,7 +47,9 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <span className="hidden text-sm font-semibold sm:inline">{user.name}</span>
+              <Link to="/profile" className="hidden text-sm font-semibold hover:text-primary sm:inline">
+                {user.name}
+              </Link>
               <button
                 onClick={handleLogout}
                 className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg"
@@ -56,16 +59,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg"
-              >
+              <Link to="/login" className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg">
                 Log in
               </Link>
-              <Link
-                to="/register"
-                className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-primary-hover"
-              >
+              <Link to="/register" className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-primary-hover">
                 Sign up
               </Link>
             </>
