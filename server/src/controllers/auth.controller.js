@@ -113,3 +113,37 @@ export const login = async (req, res, next) => {
 export const getMe = (req, res) => {
   res.json({ user: req.user });
 };
+
+// Logged-in user: update name, phone or language
+export const updateProfile = async (req, res, next) => {
+  try {
+    const data = {};
+
+    if (req.body.name !== undefined) {
+      const name = String(req.body.name).trim();
+      if (!name) return res.status(400).json({ message: "Name cannot be empty" });
+      data.name = name;
+    }
+    if (req.body.phone !== undefined) {
+      data.phone = req.body.phone ? String(req.body.phone).trim() : null;
+    }
+    if (req.body.language !== undefined) {
+      if (!["en", "hy", "ru"].includes(req.body.language)) {
+        return res.status(400).json({ message: "Language must be en, hy or ru" });
+      }
+      data.language = req.body.language;
+    }
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({ message: "Nothing to update" });
+    }
+
+    const user = await prisma.user.update({
+      where: { id: req.user.id },
+      data,
+      select: publicUserFields,
+    });
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+};

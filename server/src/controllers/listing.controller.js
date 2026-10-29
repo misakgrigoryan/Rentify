@@ -46,7 +46,7 @@ export const getListings = async (req, res, next) => {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || PAGE_SIZE));
 
-    const where = {};
+    const where = { status: "APPROVED" };
     if (req.query.category) where.category = String(req.query.category);
     if (req.query.location) {
       where.location = { contains: String(req.query.location), mode: "insensitive" };
