@@ -171,3 +171,16 @@ export const deleteListing = async (req, res, next) => {
     next(err);
   }
 };
+
+// Logged-in: only the current user's listings, including PENDING ones
+export const getMyListings = async (req, res, next) => {
+  try {
+    const listings = await prisma.listing.findMany({
+      where: { ownerId: req.user.id },
+      orderBy: { createdAt: "desc" },
+    });
+    res.json({ listings });
+  } catch (err) {
+    next(err);
+  }
+};
