@@ -50,6 +50,8 @@ model User {
   avatarUrl    String?
   role         Role     @default(USER)
   isBanned     Boolean  @default(false)
+  passwordResetTokenHash String?
+  passwordResetExpires   DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
