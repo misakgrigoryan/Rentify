@@ -5,6 +5,7 @@ import Products from "./pages/Products.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import AddListing from "./pages/AddListing.jsx";
 import ReviewPage from "./pages/ReviewPage.jsx";
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/listings/new" element={<AddListing />} />
         <Route path="/review/:bookingId" element={<ReviewPage />} />
