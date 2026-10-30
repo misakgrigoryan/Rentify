@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import Button from "../ui/Button.jsx";
 import { Repeat } from "lucide-react";
 import useAuth from "../../hooks/useAuth.js";
 import i18n from "../../i18n/index.js";
