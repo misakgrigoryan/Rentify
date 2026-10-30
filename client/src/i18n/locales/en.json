@@ -8,6 +8,12 @@
     "signup": "Sign up",
     "logout": "Log out"
   },
+  "common": {
+    "loading": "Loading...",
+    "day": "day",
+    "hour": "hour",
+    "new": "New"
+  },
   "home": {
     "heroTitle": "Rent anything, for a day or an hour",
     "heroText": "Tools, drones, projectors and sports gear from people near you. Rent what you need instead of buying it.",
@@ -15,15 +21,40 @@
     "listItem": "List your item",
     "categories": "Categories",
     "featured": "Featured listings",
-    "howItWorks": "How it works"
+    "noListings": "No listings yet. Be the first to add one.",
+    "howItWorks": "How it works",
+    "step1": "Find an item",
+    "step2": "Send a request",
+    "step3": "Pick it up and return it"
+  },
+  "categories": {
+    "Tools": "Tools",
+    "Drones": "Drones",
+    "Projectors": "Projectors",
+    "Sports": "Sports",
+    "Costumes": "Costumes"
   },
   "browse": {
     "title": "Browse items",
     "search": "Search",
+    "searchPlaceholder": "Drill, drone...",
     "category": "Category",
+    "all": "All",
     "availableDates": "Available dates",
     "from": "From",
     "to": "To",
-    "clearDates": "Clear dates"
+    "clearDates": "Clear dates",
+    "itemsFound": "{{count}} items found",
+    "itemsFoundFree": "{{count}} items found free for these dates",
+    "noMatch": "No items match your search.",
+    "loadError": "Could not load listings"
+  },
+  "listing": {
+    "listedBy": "Listed by",
+    "rating": "★ {{rating}}"
+  },
+  "footer": {
+    "rights": "© 2026 Rentify",
+    "tagline": "Rent anything, for a day or an hour"
   }
 }
