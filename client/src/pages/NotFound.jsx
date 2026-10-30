@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Button from "../components/ui/Button.jsx";
 
 export default function NotFound() {
+  const { t } = useTranslation();
   return (
     <section className="flex flex-col items-center gap-4 px-4 py-24 text-center">
       <p className="text-6xl font-bold text-primary">404</p>
-      <h1 className="text-2xl font-semibold">Page not found</h1>
-      <p className="text-muted">The page you are looking for does not exist.</p>
+      <h1 className="text-2xl font-semibold">{t("notFound.title")}</h1>
+      <p className="text-muted">{t("notFound.text")}</p>
       <Link to="/">
-        <Button>Back to home</Button>
+        <Button>{t("notFound.backHome")}</Button>
       </Link>
     </section>
   );

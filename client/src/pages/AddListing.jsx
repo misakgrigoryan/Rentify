@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
@@ -21,8 +22,8 @@ const emptyForm = {
 
 const selectClass = "rounded-lg border border-border bg-surface px-3 py-2 text-base outline-none focus:border-primary";
 
-// Same page for adding (/listings/new) and editing (/listings/:id/edit)
 export default function AddListing() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const isEdit = Boolean(id);
   const { user, loading } = useAuth();
@@ -33,7 +34,6 @@ export default function AddListing() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // In edit mode, load the listing and fill the form with its values
   useEffect(() => {
     if (!isEdit) return;
     api
@@ -52,8 +52,8 @@ export default function AddListing() {
         });
         setReady(true);
       })
-      .catch(() => setError("Could not load this listing"));
-  }, [id, isEdit]);
+      .catch(() => setError(t("listingForm.loadError")));
+  }, [id, isEdit, t]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -77,55 +77,46 @@ export default function AddListing() {
         : await api.post("/listings", body);
       navigate(`/products/${res.data.listing.id}`);
     } catch (err) {
-      setError(err.response?.data?.message || "Could not save the listing");
+      setError(err.response?.data?.message || t("listingForm.saveError"));
     } finally {
       setSubmitting(false);
     }
   }
 
   if (loading) {
-    return <PageShell title="Listing"><p className="text-muted">Loading...</p></PageShell>;
+    return <PageShell title={t("listingForm.addTitle")}><p className="text-muted">{t("common.loading")}</p></PageShell>;
   }
-
   if (!user) {
     return (
-      <PageShell title="Listing">
+      <PageShell title={t("listingForm.addTitle")}>
         <p className="text-muted">
-          Please <Link to="/login" className="text-primary underline">log in</Link> first.
+          <Link to="/login" className="text-primary underline">{t("nav.login")}</Link> {t("listingForm.loginFirst")}
         </p>
       </PageShell>
     );
   }
-
   if (!ready) {
-    return <PageShell title="Edit listing"><p className="text-muted">Loading listing...</p></PageShell>;
+    return <PageShell title={t("listingForm.editTitle")}><p className="text-muted">{t("listingForm.loadingListing")}</p></PageShell>;
   }
 
   return (
     <PageShell
-      title={isEdit ? "Edit listing" : "Add a listing"}
-      subtitle={isEdit ? "Change the details and save." : "Tell renters what you are offering."}
+      title={isEdit ? t("listingForm.editTitle") : t("listingForm.addTitle")}
+      subtitle={isEdit ? t("listingForm.editSubtitle") : t("listingForm.addSubtitle")}
     >
       <form className="grid max-w-2xl gap-4 rounded-xl bg-surface p-6 shadow-sm" onSubmit={handleSubmit}>
-        <Input id="title" name="title" label="Title" value={form.title} onChange={handleChange} required />
+        <Input id="title" name="title" label={t("listingForm.title")} value={form.title} onChange={handleChange} required />
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="description" className="text-sm font-semibold">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            rows={4}
-            value={form.description}
-            onChange={handleChange}
-            required
-            className="rounded-lg border border-border bg-surface px-3 py-2 outline-none focus:border-primary"
-          />
+          <label htmlFor="description" className="text-sm font-semibold">{t("listingForm.description")}</label>
+          <textarea id="description" name="description" rows={4} value={form.description} onChange={handleChange} required
+            className="rounded-lg border border-border bg-surface px-3 py-2 outline-none focus:border-primary" />
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input id="price" name="price" label="Price" type="number" min="1" value={form.price} onChange={handleChange} required />
+          <Input id="price" name="price" label={t("listingForm.price")} type="number" min="1" value={form.price} onChange={handleChange} required />
           <div className="flex flex-col gap-1">
-            <label htmlFor="currency" className="text-sm font-semibold">Currency</label>
+            <label htmlFor="currency" className="text-sm font-semibold">{t("listingForm.currency")}</label>
             <select id="currency" name="currency" value={form.currency} onChange={handleChange} className={selectClass}>
               <option>AMD</option>
               <option>USD</option>
@@ -134,28 +125,28 @@ export default function AddListing() {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="unit" className="text-sm font-semibold">Price per</label>
+            <label htmlFor="unit" className="text-sm font-semibold">{t("listingForm.pricePer")}</label>
             <select id="unit" name="unit" value={form.unit} onChange={handleChange} className={selectClass}>
-              <option value="DAY">Day</option>
-              <option value="HOUR">Hour</option>
+              <option value="DAY">{t("common.day")}</option>
+              <option value="HOUR">{t("common.hour")}</option>
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="category" className="text-sm font-semibold">Category</label>
+            <label htmlFor="category" className="text-sm font-semibold">{t("listingForm.category")}</label>
             <select id="category" name="category" value={form.category} onChange={handleChange} className={selectClass}>
-              {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+              {CATEGORIES.map((c) => <option key={c} value={c}>{t(`categories.${c}`)}</option>)}
             </select>
           </div>
         </div>
 
-        <Input id="location" name="location" label="Location (city)" value={form.location} onChange={handleChange} required />
-        <Input id="imageUrl" name="imageUrl" label="Photo URL (optional)" placeholder="https://..." value={form.imageUrl} onChange={handleChange} />
+        <Input id="location" name="location" label={t("listingForm.location")} value={form.location} onChange={handleChange} required />
+        <Input id="imageUrl" name="imageUrl" label={t("listingForm.photoUrl")} placeholder="https://..." value={form.imageUrl} onChange={handleChange} />
 
         {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</p>}
 
         <div className="flex gap-3">
-          <Button type="submit" loading={submitting}>{isEdit ? "Save changes" : "Publish"}</Button>
-          {isEdit && <Link to="/dashboard"><Button type="button" variant="secondary">Cancel</Button></Link>}
+          <Button type="submit" loading={submitting}>{isEdit ? t("listingForm.saveChanges") : t("listingForm.publish")}</Button>
+          {isEdit && <Link to="/dashboard"><Button type="button" variant="secondary">{t("common.cancel")}</Button></Link>}
         </div>
       </form>
     </PageShell>

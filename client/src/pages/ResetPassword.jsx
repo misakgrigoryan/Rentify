@@ -1,29 +1,28 @@
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import api from "../lib/api.js";
 
-// Reads ?token=... from the email link and sends the new password to the API
 export default function ResetPassword() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "";
-
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [done, setDone] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    setMessage("");
     setSubmitting(true);
     try {
-      const res = await api.post("/auth/reset-password", { token, password });
-      setMessage(res.data.message);
+      await api.post("/auth/reset-password", { token, password });
+      setDone(true);
     } catch (err) {
-      setError(err.response?.data?.message || "Could not reach the server");
+      setError(err.response?.data?.message || t("common.networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -32,7 +31,7 @@ export default function ResetPassword() {
   if (!token) {
     return (
       <section className="mx-auto max-w-md px-4 py-12">
-        <p className="rounded-xl bg-surface p-6 shadow-sm">This reset link is missing its token.</p>
+        <p className="rounded-xl bg-surface p-6 shadow-sm">{t("auth.missingToken")}</p>
       </section>
     );
   }
@@ -40,24 +39,15 @@ export default function ResetPassword() {
   return (
     <section className="mx-auto max-w-md px-4 py-12">
       <div className="rounded-xl bg-surface p-6 shadow-sm">
-        <h1 className="text-2xl font-bold">Set a new password</h1>
-
+        <h1 className="text-2xl font-bold">{t("auth.resetTitle")}</h1>
         <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
-          <Input
-            id="password"
-            label="New password (at least 8 characters)"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <Input id="password" label={t("auth.newPassword")} type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</p>}
-          {message && <p className="rounded-lg bg-green-50 p-3 text-sm text-success">{message}</p>}
-          <Button type="submit" className="w-full" loading={submitting}>Save password</Button>
+          {done && <p className="rounded-lg bg-green-50 p-3 text-sm text-success">{t("auth.passwordUpdated")}</p>}
+          <Button type="submit" className="w-full" loading={submitting}>{t("auth.saveNewPassword")}</Button>
         </form>
-
         <p className="mt-4 text-sm">
-          <Link to="/login" className="text-primary underline">Go to log in</Link>
+          <Link to="/login" className="text-primary underline">{t("auth.goToLogin")}</Link>
         </p>
       </div>
     </section>
