@@ -12,7 +12,10 @@
     "loading": "Loading...",
     "day": "day",
     "hour": "hour",
-    "new": "New"
+    "new": "New",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel"
   },
   "home": {
     "heroTitle": "Rent anything, for a day or an hour",
@@ -51,7 +54,49 @@
   },
   "listing": {
     "listedBy": "Listed by",
-    "rating": "★ {{rating}}"
+    "rating": "★ {{rating}}",
+    "addListing": "Add listing"
+  },
+  "actions": {
+    "accept": "Accept",
+    "reject": "Reject",
+    "pickedUp": "Mark picked up",
+    "returned": "Mark returned",
+    "leaveReview": "Leave a review"
+  },
+  "status": {
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "ACCEPTED": "Accepted",
+    "ACTIVE": "Active",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {{name}}",
+    "loginPrompt": "Please log in to see your dashboard.",
+    "tabs": {
+      "mine": "My Listings",
+      "requests": "Requests",
+      "active": "Active",
+      "finished": "Finished"
+    },
+    "noListings": "You have no listings yet.",
+    "nothing": "Nothing here yet.",
+    "from": "From {{name}}",
+    "confirmDelete": "Delete this listing?",
+    "listingDeleted": "Listing deleted",
+    "deleteError": "Could not delete the listing",
+    "updateError": "Could not update the booking",
+    "loadError": "Could not load this tab."
+  },
+  "messages": {
+    "title": "Messages",
+    "subtitle": "Chat with renters and owners (Phase 2).",
+    "noConversations": "No conversations yet.",
+    "selectConversation": "Select a conversation."
   },
   "footer": {
     "rights": "© 2026 Rentify",

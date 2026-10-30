@@ -12,7 +12,10 @@
     "loading": "Загрузка...",
     "day": "день",
     "hour": "час",
-    "new": "Новое"
+    "new": "Новое",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "cancel": "Отменить"
   },
   "home": {
     "heroTitle": "Арендуйте что угодно на день или на час",
@@ -51,7 +54,49 @@
   },
   "listing": {
     "listedBy": "Автор:",
-    "rating": "★ {{rating}}"
+    "rating": "★ {{rating}}",
+    "addListing": "Добавить объявление"
+  },
+  "actions": {
+    "accept": "Принять",
+    "reject": "Отклонить",
+    "pickedUp": "Отметить как взято",
+    "returned": "Отметить как возвращено",
+    "leaveReview": "Оставить отзыв"
+  },
+  "status": {
+    "PENDING": "Ожидает",
+    "APPROVED": "Одобрено",
+    "REJECTED": "Отклонено",
+    "ACCEPTED": "Принято",
+    "ACTIVE": "Активно",
+    "COMPLETED": "Завершено",
+    "CANCELLED": "Отменено"
+  },
+  "dashboard": {
+    "title": "Кабинет",
+    "welcome": "Добро пожаловать, {{name}}",
+    "loginPrompt": "Войдите, чтобы увидеть свой кабинет.",
+    "tabs": {
+      "mine": "Мои объявления",
+      "requests": "Запросы",
+      "active": "Активные",
+      "finished": "Завершенные"
+    },
+    "noListings": "У вас пока нет объявлений.",
+    "nothing": "Пока здесь пусто.",
+    "from": "От: {{name}}",
+    "confirmDelete": "Удалить это объявление?",
+    "listingDeleted": "Объявление удалено",
+    "deleteError": "Не удалось удалить объявление",
+    "updateError": "Не удалось обновить бронирование",
+    "loadError": "Не удалось загрузить этот раздел."
+  },
+  "messages": {
+    "title": "Сообщения",
+    "subtitle": "Общение с арендаторами и владельцами (2-й этап).",
+    "noConversations": "Пока нет переписок.",
+    "selectConversation": "Выберите переписку."
   },
   "footer": {
     "rights": "© 2026 Rentify",

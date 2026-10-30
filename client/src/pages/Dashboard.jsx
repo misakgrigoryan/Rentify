@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Button from "../components/ui/Button.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 
-const tabs = ["My Listings", "Requests", "Active", "Finished"];
+const TABS = ["mine", "requests", "active", "finished"];
 const ACTIVE = ["PENDING", "ACCEPTED", "ACTIVE"];
 const FINISHED = ["COMPLETED", "REJECTED", "CANCELLED"];
 
@@ -20,8 +21,9 @@ const statusStyles = {
 };
 
 export default function Dashboard() {
+  const { t } = useTranslation();
   const { user, loading } = useAuth();
-  const [tab, setTab] = useState("My Listings");
+  const [tab, setTab] = useState("mine");
   const [items, setItems] = useState([]);
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
@@ -30,8 +32,8 @@ export default function Dashboard() {
     if (!user) return;
     setStatus("loading");
     const request =
-      tab === "My Listings" ? api.get("/listings/mine")
-      : tab === "Requests" ? api.get("/bookings/requests")
+      tab === "mine" ? api.get("/listings/mine")
+      : tab === "requests" ? api.get("/bookings/requests")
       : api.get("/bookings/mine");
 
     request
@@ -43,13 +45,13 @@ export default function Dashboard() {
   }, [user, tab]);
 
   async function deleteListing(id) {
-    if (!window.confirm("Delete this listing?")) return;
+    if (!window.confirm(t("dashboard.confirmDelete"))) return;
     try {
       await api.delete(`/listings/${id}`);
       setItems(items.filter((l) => l.id !== id));
-      setMessage("Listing deleted");
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Could not delete the listing");
+      setMessage(t("dashboard.listingDeleted"));
+    } catch {
+      setMessage(t("dashboard.deleteError"));
     }
   }
 
@@ -59,40 +61,41 @@ export default function Dashboard() {
       const res = await api.patch(`/bookings/${id}/status`, { status: newStatus });
       setItems(items.map((b) => (b.id === id ? res.data.booking : b)));
     } catch (err) {
-      setMessage(err.response?.data?.message || "Could not update the booking");
+      setMessage(err.response?.data?.message || t("dashboard.updateError"));
     }
   }
 
   if (loading) {
-    return <PageShell title="Dashboard"><p className="text-muted">Loading...</p></PageShell>;
+    return <PageShell title={t("dashboard.title")}><p className="text-muted">{t("common.loading")}</p></PageShell>;
   }
   if (!user) {
     return (
-      <PageShell title="Dashboard">
+      <PageShell title={t("dashboard.title")}>
         <p className="text-muted">
-          Please <Link to="/login" className="text-primary underline">log in</Link> to see your dashboard.
+          {t("dashboard.loginPrompt")}{" "}
+          <Link to="/login" className="text-primary underline">{t("nav.login")}</Link>
         </p>
       </PageShell>
     );
   }
 
   const visible =
-    tab === "Active" ? items.filter((b) => ACTIVE.includes(b.status))
-    : tab === "Finished" ? items.filter((b) => FINISHED.includes(b.status))
+    tab === "active" ? items.filter((b) => ACTIVE.includes(b.status))
+    : tab === "finished" ? items.filter((b) => FINISHED.includes(b.status))
     : items;
 
   return (
-    <PageShell title="Dashboard" subtitle={`Welcome, ${user.name}`}>
+    <PageShell title={t("dashboard.title")} subtitle={t("dashboard.welcome", { name: user.name })}>
       <div className="flex gap-2 overflow-x-auto border-b border-border">
-        {tabs.map((t) => (
+        {TABS.map((id) => (
           <button
-            key={t}
-            onClick={() => { setTab(t); setItems([]); setStatus("loading"); setMessage(""); }}
+            key={id}
+            onClick={() => { setTab(id); setItems([]); setStatus("loading"); setMessage(""); }}
             className={`whitespace-nowrap px-4 py-2 text-sm font-semibold ${
-              tab === t ? "border-b-2 border-primary text-primary" : "text-muted"
+              tab === id ? "border-b-2 border-primary text-primary" : "text-muted"
             }`}
           >
-            {t}
+            {t(`dashboard.tabs.${id}`)}
           </button>
         ))}
       </div>
@@ -100,14 +103,14 @@ export default function Dashboard() {
       {message && <p className="mt-4 rounded-lg bg-surface p-3 text-sm">{message}</p>}
 
       {status === "loading" ? (
-        <p className="mt-6 text-muted">Loading...</p>
+        <p className="mt-6 text-muted">{t("common.loading")}</p>
       ) : status === "error" ? (
-        <p className="mt-6 text-danger">Could not load this tab.</p>
-      ) : tab === "My Listings" ? (
+        <p className="mt-6 text-danger">{t("dashboard.loadError")}</p>
+      ) : tab === "mine" ? (
         items.length === 0 ? (
           <div className="mt-6 flex flex-col items-start gap-3 rounded-xl bg-surface p-6 shadow-sm">
-            <p className="text-muted">You have no listings yet.</p>
-            <Link to="/listings/new"><Button>Add a listing</Button></Link>
+            <p className="text-muted">{t("dashboard.noListings")}</p>
+            <Link to="/listings/new"><Button>{t("listing.addListing")}</Button></Link>
           </div>
         ) : (
           <div className="mt-6 flex flex-col gap-3">
@@ -116,20 +119,22 @@ export default function Dashboard() {
                 <div>
                   <Link to={`/products/${listing.id}`} className="font-semibold text-primary hover:underline">{listing.title}</Link>
                   <p className="text-sm text-muted">
-                    {Number(listing.price)} {listing.currency} / {listing.unit.toLowerCase()} · {listing.location}
+                    {Number(listing.price)} {listing.currency} / {listing.unit === "HOUR" ? t("common.hour") : t("common.day")} · {listing.location}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[listing.status]}`}>{listing.status}</span>
-                  <Link to={`/listings/${listing.id}/edit`}><Button variant="secondary" size="sm">Edit</Button></Link>
-                  <Button variant="danger" size="sm" onClick={() => deleteListing(listing.id)}>Delete</Button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[listing.status]}`}>{t(`status.${listing.status}`)}</span>
+                  <Link to={`/listings/${listing.id}/edit`}>
+                    <Button variant="secondary" size="sm">{t("common.edit")}</Button>
+                  </Link>
+                  <Button variant="danger" size="sm" onClick={() => deleteListing(listing.id)}>{t("common.delete")}</Button>
                 </div>
               </div>
             ))}
           </div>
         )
       ) : visible.length === 0 ? (
-        <p className="mt-6 rounded-xl bg-surface p-6 text-muted shadow-sm">Nothing here yet.</p>
+        <p className="mt-6 rounded-xl bg-surface p-6 text-muted shadow-sm">{t("dashboard.nothing")}</p>
       ) : (
         <div className="mt-6 flex flex-col gap-3">
           {visible.map((b) => (
@@ -139,29 +144,29 @@ export default function Dashboard() {
                 <p className="text-sm text-muted">
                   {new Date(b.startDate).toLocaleString()} → {new Date(b.endDate).toLocaleString()}
                 </p>
-                {tab === "Requests" && <p className="text-sm text-muted">From {b.renter.name}</p>}
+                {tab === "requests" && <p className="text-sm text-muted">{t("dashboard.from", { name: b.renter.name })}</p>}
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[b.status]}`}>{b.status}</span>
+                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[b.status]}`}>{t(`status.${b.status}`)}</span>
 
-                {tab === "Requests" && b.status === "PENDING" && (
+                {tab === "requests" && b.status === "PENDING" && (
                   <>
-                    <Button size="sm" onClick={() => changeBooking(b.id, "ACCEPTED")}>Accept</Button>
-                    <Button size="sm" variant="danger" onClick={() => changeBooking(b.id, "REJECTED")}>Reject</Button>
+                    <Button size="sm" onClick={() => changeBooking(b.id, "ACCEPTED")}>{t("actions.accept")}</Button>
+                    <Button size="sm" variant="danger" onClick={() => changeBooking(b.id, "REJECTED")}>{t("actions.reject")}</Button>
                   </>
                 )}
-                {tab === "Requests" && b.status === "ACCEPTED" && (
-                  <Button size="sm" onClick={() => changeBooking(b.id, "ACTIVE")}>Mark picked up</Button>
+                {tab === "requests" && b.status === "ACCEPTED" && (
+                  <Button size="sm" onClick={() => changeBooking(b.id, "ACTIVE")}>{t("actions.pickedUp")}</Button>
                 )}
-                {tab === "Requests" && b.status === "ACTIVE" && (
-                  <Button size="sm" onClick={() => changeBooking(b.id, "COMPLETED")}>Mark returned</Button>
+                {tab === "requests" && b.status === "ACTIVE" && (
+                  <Button size="sm" onClick={() => changeBooking(b.id, "COMPLETED")}>{t("actions.returned")}</Button>
                 )}
-                {tab !== "Requests" && (b.status === "PENDING" || b.status === "ACCEPTED") && (
-                  <Button size="sm" variant="secondary" onClick={() => changeBooking(b.id, "CANCELLED")}>Cancel</Button>
+                {tab !== "requests" && (b.status === "PENDING" || b.status === "ACCEPTED") && (
+                  <Button size="sm" variant="secondary" onClick={() => changeBooking(b.id, "CANCELLED")}>{t("common.cancel")}</Button>
                 )}
-                {tab === "Finished" && b.status === "COMPLETED" && user.id === b.renterId && (
+                {tab === "finished" && b.status === "COMPLETED" && user.id === b.renterId && (
                   <Link to={`/review/${b.id}`}>
-                    <Button size="sm" variant="secondary">Leave a review</Button>
+                    <Button size="sm" variant="secondary">{t("actions.leaveReview")}</Button>
                   </Link>
                 )}
               </div>
