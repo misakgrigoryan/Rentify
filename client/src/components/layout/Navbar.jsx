@@ -1,9 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import { Repeat } from "lucide-react";
 import useAuth from "../../hooks/useAuth.js";
 import i18n from "../../i18n/index.js";
 
-const LANGS = ["en", "hy", "ru"];
+const LANGS = ["hy", "en", "ru"];
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -29,9 +31,18 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-surface">
+    <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="text-xl font-bold text-primary">Rentify</Link>
+        <Link to="/" className="group flex items-center gap-2">
+          <motion.span
+            whileHover={{ rotate: 180 }}
+            transition={{ type: "spring", stiffness: 200, damping: 12 }}
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white"
+          >
+            <Repeat size={20} />
+          </motion.span>
+          <span className="text-xl font-bold text-primary">Rentify</span>
+        </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
           {links.map((link) => (
@@ -39,23 +50,41 @@ export default function Navbar() {
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
-                `text-sm font-semibold ${isActive ? "text-primary" : "text-muted hover:text-text"}`
+                `relative py-1 text-sm font-semibold ${isActive ? "text-primary" : "text-muted hover:text-text"}`
               }
             >
-              {link.label}
+              {({ isActive }) => (
+                <>
+                  {link.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-underline"
+                      className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-primary"
+                    />
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <div className="hidden gap-1 text-xs font-semibold text-muted sm:flex">
+          <div className="hidden items-center gap-1 rounded-full bg-bg p-1 sm:flex">
             {LANGS.map((lng) => (
               <button
                 key={lng}
                 onClick={() => changeLang(lng)}
-                className={`rounded px-2 py-1 hover:bg-bg ${inst.language === lng ? "text-primary" : ""}`}
+                className={`relative rounded-full px-2.5 py-1 text-xs font-bold transition-colors ${
+                  inst.language === lng ? "text-white" : "text-muted hover:text-text"
+                }`}
               >
-                {lng.toUpperCase()}
+                {inst.language === lng && (
+                  <motion.span
+                    layoutId="lang-pill"
+                    className="absolute inset-0 rounded-full bg-primary"
+                  />
+                )}
+                <span className="relative">{lng.toUpperCase()}</span>
               </button>
             ))}
           </div>
@@ -65,20 +94,17 @@ export default function Navbar() {
               <Link to="/profile" className="hidden text-sm font-semibold hover:text-primary sm:inline">
                 {user.name}
               </Link>
-              <button
-                onClick={handleLogout}
-                className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg"
-              >
+              <Button variant="secondary" size="sm" onClick={handleLogout}>
                 {t("nav.logout")}
-              </button>
+              </Button>
             </>
           ) : (
             <>
-              <Link to="/login" className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg">
-                {t("nav.login")}
+              <Link to="/login">
+                <Button variant="secondary" size="sm">{t("nav.login")}</Button>
               </Link>
-              <Link to="/register" className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-primary-hover">
-                {t("nav.signup")}
+              <Link to="/register">
+                <Button size="sm">{t("nav.signup")}</Button>
               </Link>
             </>
           )}

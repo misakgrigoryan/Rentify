@@ -4,8 +4,8 @@ import en from "./locales/en.json";
 import hy from "./locales/hy.json";
 import ru from "./locales/ru.json";
 
-// Remember the chosen language in the browser, default to English
-const saved = localStorage.getItem("rentify_lang") || "en";
+// Armenian for first-time visitors, then the language the user chose
+const saved = localStorage.getItem("rentify_lang") || "hy";
 
 i18n.use(initReactI18next).init({
   resources: { en: { translation: en }, hy: { translation: hy }, ru: { translation: ru } },
