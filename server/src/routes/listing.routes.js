@@ -7,11 +7,13 @@ import {
   updateListing,
   deleteListing,
 } from "../controllers/listing.controller.js";
+import { getAvailableListings } from "../controllers/availability.controller.js";
 import { requireAuth } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
 router.get("/", getListings);
+router.get("/available", getAvailableListings);
 router.get("/mine", requireAuth, getMyListings);
 router.get("/:id", getListing);
 router.post("/", requireAuth, createListing);
