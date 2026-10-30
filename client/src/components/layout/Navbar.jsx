@@ -1,18 +1,27 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import useAuth from "../../hooks/useAuth.js";
+import i18n from "../../i18n/index.js";
 
-const links = [
-  { to: "/products", label: "Browse" },
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/messages", label: "Messages" },
-];
+const LANGS = ["en", "hy", "ru"];
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { t, i18n: inst } = useTranslation();
 
   const isAdmin = user?.role === "SUPER_ADMIN" || user?.role === "MODERATOR";
-  const navLinks = isAdmin ? [...links, { to: "/admin", label: "Admin" }] : links;
+  const links = [
+    { to: "/products", label: t("nav.browse") },
+    { to: "/dashboard", label: t("nav.dashboard") },
+    { to: "/messages", label: t("nav.messages") },
+    ...(isAdmin ? [{ to: "/admin", label: t("nav.admin") }] : []),
+  ];
+
+  function changeLang(lng) {
+    i18n.changeLanguage(lng);
+    localStorage.setItem("rentify_lang", lng);
+  }
 
   function handleLogout() {
     logout();
@@ -25,7 +34,7 @@ export default function Navbar() {
         <Link to="/" className="text-xl font-bold text-primary">Rentify</Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
+          {links.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -40,9 +49,15 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2">
           <div className="hidden gap-1 text-xs font-semibold text-muted sm:flex">
-            <button className="rounded px-2 py-1 hover:bg-bg">EN</button>
-            <button className="rounded px-2 py-1 hover:bg-bg">HY</button>
-            <button className="rounded px-2 py-1 hover:bg-bg">RU</button>
+            {LANGS.map((lng) => (
+              <button
+                key={lng}
+                onClick={() => changeLang(lng)}
+                className={`rounded px-2 py-1 hover:bg-bg ${inst.language === lng ? "text-primary" : ""}`}
+              >
+                {lng.toUpperCase()}
+              </button>
+            ))}
           </div>
 
           {user ? (
@@ -54,16 +69,16 @@ export default function Navbar() {
                 onClick={handleLogout}
                 className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg"
               >
-                Log out
+                {t("nav.logout")}
               </button>
             </>
           ) : (
             <>
               <Link to="/login" className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold hover:bg-bg">
-                Log in
+                {t("nav.login")}
               </Link>
               <Link to="/register" className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-primary-hover">
-                Sign up
+                {t("nav.signup")}
               </Link>
             </>
           )}

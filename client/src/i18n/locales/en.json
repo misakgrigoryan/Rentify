@@ -1,0 +1,29 @@
+{
+  "nav": {
+    "browse": "Browse",
+    "dashboard": "Dashboard",
+    "messages": "Messages",
+    "admin": "Admin",
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out"
+  },
+  "home": {
+    "heroTitle": "Rent anything, for a day or an hour",
+    "heroText": "Tools, drones, projectors and sports gear from people near you. Rent what you need instead of buying it.",
+    "browseItems": "Browse items",
+    "listItem": "List your item",
+    "categories": "Categories",
+    "featured": "Featured listings",
+    "howItWorks": "How it works"
+  },
+  "browse": {
+    "title": "Browse items",
+    "search": "Search",
+    "category": "Category",
+    "availableDates": "Available dates",
+    "from": "From",
+    "to": "To",
+    "clearDates": "Clear dates"
+  }
+}
