@@ -121,6 +121,7 @@ export default function Dashboard() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyles[listing.status]}`}>{listing.status}</span>
+                  <Link to={`/listings/${listing.id}/edit`}><Button variant="secondary" size="sm">Edit</Button></Link>
                   <Button variant="danger" size="sm" onClick={() => deleteListing(listing.id)}>Delete</Button>
                 </div>
               </div>

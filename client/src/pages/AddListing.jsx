@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
@@ -21,13 +21,39 @@ const emptyForm = {
 
 const selectClass = "rounded-lg border border-border bg-surface px-3 py-2 text-base outline-none focus:border-primary";
 
+// Same page for adding (/listings/new) and editing (/listings/:id/edit)
 export default function AddListing() {
+  const { id } = useParams();
+  const isEdit = Boolean(id);
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState(emptyForm);
+  const [ready, setReady] = useState(!isEdit);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // In edit mode, load the listing and fill the form with its values
+  useEffect(() => {
+    if (!isEdit) return;
+    api
+      .get(`/listings/${id}`)
+      .then((res) => {
+        const l = res.data.listing;
+        setForm({
+          title: l.title,
+          description: l.description,
+          price: String(Number(l.price)),
+          currency: l.currency,
+          unit: l.unit,
+          category: l.category,
+          location: l.location,
+          imageUrl: l.imageUrls?.[0] || "",
+        });
+        setReady(true);
+      })
+      .catch(() => setError("Could not load this listing"));
+  }, [id, isEdit]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -35,41 +61,51 @@ export default function AddListing() {
     e.preventDefault();
     setError("");
     setSubmitting(true);
+    const body = {
+      title: form.title,
+      description: form.description,
+      price: form.price,
+      currency: form.currency,
+      unit: form.unit,
+      category: form.category,
+      location: form.location,
+      imageUrls: form.imageUrl ? [form.imageUrl] : [],
+    };
     try {
-      const res = await api.post("/listings", {
-        title: form.title,
-        description: form.description,
-        price: form.price,
-        currency: form.currency,
-        unit: form.unit,
-        category: form.category,
-        location: form.location,
-        imageUrls: form.imageUrl ? [form.imageUrl] : [],
-      });
+      const res = isEdit
+        ? await api.put(`/listings/${id}`, body)
+        : await api.post("/listings", body);
       navigate(`/products/${res.data.listing.id}`);
     } catch (err) {
-      setError(err.response?.data?.message || "Could not reach the server");
+      setError(err.response?.data?.message || "Could not save the listing");
     } finally {
       setSubmitting(false);
     }
   }
 
   if (loading) {
-    return <PageShell title="Add a listing"><p className="text-muted">Loading...</p></PageShell>;
+    return <PageShell title="Listing"><p className="text-muted">Loading...</p></PageShell>;
   }
 
   if (!user) {
     return (
-      <PageShell title="Add a listing">
+      <PageShell title="Listing">
         <p className="text-muted">
-          Please <Link to="/login" className="text-primary underline">log in</Link> to add a listing.
+          Please <Link to="/login" className="text-primary underline">log in</Link> first.
         </p>
       </PageShell>
     );
   }
 
+  if (!ready) {
+    return <PageShell title="Edit listing"><p className="text-muted">Loading listing...</p></PageShell>;
+  }
+
   return (
-    <PageShell title="Add a listing" subtitle="Tell renters what you are offering.">
+    <PageShell
+      title={isEdit ? "Edit listing" : "Add a listing"}
+      subtitle={isEdit ? "Change the details and save." : "Tell renters what you are offering."}
+    >
       <form className="grid max-w-2xl gap-4 rounded-xl bg-surface p-6 shadow-sm" onSubmit={handleSubmit}>
         <Input id="title" name="title" label="Title" value={form.title} onChange={handleChange} required />
 
@@ -117,7 +153,10 @@ export default function AddListing() {
 
         {error && <p className="rounded-lg bg-red-50 p-3 text-sm text-danger">{error}</p>}
 
-        <Button type="submit" loading={submitting}>Publish</Button>
+        <div className="flex gap-3">
+          <Button type="submit" loading={submitting}>{isEdit ? "Save changes" : "Publish"}</Button>
+          {isEdit && <Link to="/dashboard"><Button type="button" variant="secondary">Cancel</Button></Link>}
+        </div>
       </form>
     </PageShell>
   );

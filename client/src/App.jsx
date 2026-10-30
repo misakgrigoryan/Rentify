@@ -27,6 +27,7 @@ export default function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/listings/new" element={<AddListing />} />
+        <Route path="/listings/:id/edit" element={<AddListing />} />
         <Route path="/review/:bookingId" element={<ReviewPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
