@@ -1,7 +1,7 @@
-// A labeled text input. Pass type, name, placeholder, value, onChange, etc.
+// A labeled input with a soft rounded style and a glowing focus ring
 export default function Input({ label, id, className = "", ...props }) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       {label && (
         <label htmlFor={id} className="text-sm font-semibold text-text">
           {label}
@@ -9,7 +9,7 @@ export default function Input({ label, id, className = "", ...props }) {
       )}
       <input
         id={id}
-        className={`rounded-lg border border-border bg-surface px-3 py-2 text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 ${className}`}
+        className={`rounded-2xl border-2 border-border bg-surface px-4 py-2.5 text-base outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15 ${className}`}
         {...props}
       />
     </div>
