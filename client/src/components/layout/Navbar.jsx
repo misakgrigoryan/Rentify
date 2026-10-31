@@ -1,10 +1,12 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { KeyRound, Moon, Sun } from "lucide-react";
 import Button from "../ui/Button.jsx";
-import { KeyRound } from "lucide-react";
 import useAuth from "../../hooks/useAuth.js";
 import i18n from "../../i18n/index.js";
+import { getTheme, setTheme } from "../../lib/theme.js";
 
 const LANGS = ["hy", "en", "ru"];
 
@@ -12,6 +14,7 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { t, i18n: inst } = useTranslation();
+  const [dark, setDark] = useState(getTheme() === "dark");
 
   const isAdmin = user?.role === "SUPER_ADMIN" || user?.role === "MODERATOR";
   const links = [
@@ -24,6 +27,12 @@ export default function Navbar() {
   function changeLang(lng) {
     i18n.changeLanguage(lng);
     localStorage.setItem("rentify_lang", lng);
+  }
+
+  function toggleTheme() {
+    const next = !dark;
+    setTheme(next ? "dark" : "light");
+    setDark(next);
   }
 
   function handleLogout() {
@@ -80,15 +89,22 @@ export default function Navbar() {
                 }`}
               >
                 {inst.language === lng && (
-                  <motion.span
-                    layoutId="lang-pill"
-                    className="absolute inset-0 rounded-full bg-primary"
-                  />
+                  <motion.span layoutId="lang-pill" className="absolute inset-0 rounded-full bg-primary" />
                 )}
                 <span className="relative">{lng.toUpperCase()}</span>
               </button>
             ))}
           </div>
+
+          <motion.button
+            whileHover={{ rotate: 20, scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={toggleTheme}
+            aria-label={dark ? "Light mode" : "Dark mode"}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-bg text-primary ring-1 ring-border"
+          >
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </motion.button>
 
           {user ? (
             <>
