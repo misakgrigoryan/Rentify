@@ -73,6 +73,10 @@ model Listing {
   location    String
   imageUrls   String[]
   status      ListingStatus @default(PENDING)
+  titleHy       String?
+  titleRu       String?
+  descriptionHy String?
+  descriptionRu String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
