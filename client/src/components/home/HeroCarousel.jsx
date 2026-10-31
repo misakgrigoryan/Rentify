@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { MapPin, Sparkles } from "lucide-react";
 import { localized } from "../../lib/i18nContent.js";
 
-// Cycles through listings one at a time, with a slide animation and dots
+// Cycles through listings one at a time. Clicking the card opens that listing.
 export default function HeroCarousel({ listings }) {
   const { t, i18n } = useTranslation();
   const [index, setIndex] = useState(0);
@@ -31,28 +32,30 @@ export default function HeroCarousel({ listings }) {
           transition={{ type: "spring", stiffness: 140, damping: 16 }}
         >
           <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
-            <div className="overflow-hidden rounded-3xl bg-surface text-text shadow-2xl">
-              <div className="flex h-56 items-center justify-center bg-bg p-4">
-                {item.imageUrls?.[0] ? (
-                  <img src={item.imageUrls[0]} alt={localized(item, "title", i18n.language)} className="h-full w-full object-contain" />
-                ) : (
-                  <Sparkles size={64} className="text-primary" />
-                )}
-              </div>
-              <div className="p-5">
-                <p className="text-xs font-bold uppercase tracking-wider text-primary">{t(`categories.${item.category}`)}</p>
-                <h3 className="mt-1 text-lg font-extrabold">{localized(item, "title", i18n.language)}</h3>
-                <p className="mt-1 flex items-center gap-1 text-sm text-muted">
-                  <MapPin size={14} /> {item.location}
-                </p>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="rounded-2xl bg-primary px-4 py-2 text-lg font-extrabold text-white">
-                    {Number(item.price).toLocaleString()} {item.currency}
-                  </span>
-                  <span className="text-sm text-muted">/ {item.unit === "HOUR" ? t("common.hour") : t("common.day")}</span>
+            <Link to={`/products/${item.id}`} className="block">
+              <div className="overflow-hidden rounded-3xl bg-surface text-text shadow-2xl transition-transform hover:scale-[1.02]">
+                <div className="flex h-56 items-center justify-center bg-bg p-4">
+                  {item.imageUrls?.[0] ? (
+                    <img src={item.imageUrls[0]} alt={localized(item, "title", i18n.language)} className="h-full w-full object-contain" />
+                  ) : (
+                    <Sparkles size={64} className="text-primary" />
+                  )}
+                </div>
+                <div className="p-5">
+                  <p className="text-xs font-bold uppercase tracking-wider text-primary">{t(`categories.${item.category}`)}</p>
+                  <h3 className="mt-1 text-lg font-extrabold">{localized(item, "title", i18n.language)}</h3>
+                  <p className="mt-1 flex items-center gap-1 text-sm text-muted">
+                    <MapPin size={14} /> {item.location}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="rounded-2xl bg-primary px-4 py-2 text-lg font-extrabold text-white">
+                      {Number(item.price).toLocaleString()} {item.currency}
+                    </span>
+                    <span className="text-sm text-muted">/ {item.unit === "HOUR" ? t("common.hour") : t("common.day")}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </motion.div>
         </motion.div>
       </AnimatePresence>
