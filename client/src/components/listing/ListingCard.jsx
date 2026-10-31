@@ -1,26 +1,61 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Card from "../ui/Card.jsx";
+import { motion } from "framer-motion";
+import { MapPin, Star } from "lucide-react";
+import { getCategoryIcon } from "../../lib/categories.js";
 
-export default function ListingCard({ listing }) {
+// index staggers the entrance, so cards appear one after another
+export default function ListingCard({ listing, index = 0 }) {
   const { t } = useTranslation();
-  const image =
-    listing.imageUrls?.[0] ||
-    `https://placehold.co/600x400/e2e8f0/0f172a?text=${encodeURIComponent(listing.category)}`;
+  const Icon = getCategoryIcon(listing.category);
+  const image = listing.imageUrls?.[0];
   const unit = listing.unit === "HOUR" ? t("common.hour") : t("common.day");
-  const rating = listing.rating ? t("listing.rating", { rating: listing.rating }) : t("common.new");
 
   return (
-    <Link to={`/products/${listing.id}`}>
-      <Card className="h-full">
-        <img src={image} alt={listing.title} className="mb-3 h-40 w-full rounded-lg object-cover" />
-        <h3 className="font-semibold text-text">{listing.title}</h3>
-        <p className="text-sm text-muted">{listing.location} · {rating}</p>
-        <p className="mt-2 font-bold text-accent">
-          {Number(listing.price)} {listing.currency}
-          <span className="text-sm font-normal text-muted"> / {unit}</span>
-        </p>
-      </Card>
-    </Link>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.07, type: "spring", stiffness: 200, damping: 20 }}
+      className="h-full"
+    >
+      <Link to={`/products/${listing.id}`} className="group block h-full">
+        <motion.div
+          whileHover={{ y: -8, rotate: -0.6 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="h-full overflow-hidden rounded-3xl bg-surface shadow-sm ring-1 ring-border transition-shadow hover:shadow-xl hover:shadow-primary/15"
+        >
+          <div className="relative flex h-44 items-center justify-center overflow-hidden bg-accent/20">
+            {image ? (
+              <img
+                src={image}
+                alt={listing.title}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            ) : (
+              <Icon
+                size={64}
+                className="text-primary transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-125"
+              />
+            )}
+            <span className="absolute left-3 top-3 rounded-full bg-surface px-3 py-1 text-xs font-bold text-primary shadow-sm">
+              {t(`categories.${listing.category}`)}
+            </span>
+          </div>
+
+          <div className="p-4">
+            <h3 className="font-bold text-text">{listing.title}</h3>
+            <p className="mt-1 flex items-center gap-1 text-sm text-muted">
+              <MapPin size={14} /> {listing.location}
+              <span className="mx-1">·</span>
+              <Star size={14} className="text-accent" /> {listing.rating ? listing.rating : t("common.new")}
+            </p>
+            <p className="mt-3 text-lg font-extrabold text-primary">
+              {Number(listing.price).toLocaleString()} {listing.currency}
+              <span className="text-sm font-normal text-muted"> / {unit}</span>
+            </p>
+          </div>
+        </motion.div>
+      </Link>
+    </motion.div>
   );
 }
