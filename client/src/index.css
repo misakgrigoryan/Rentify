@@ -2,7 +2,7 @@
 
 /* Light theme (terracotta) */
 @theme {
-  --font-sans: "Noto Sans", system-ui, sans-serif;
+  --font-sans: "Noto Sans", "Noto Sans Armenian", system-ui, sans-serif;
   --color-primary: #c2573a;
   --color-primary-hover: #a6442a;
   --color-accent: #f2a65a;

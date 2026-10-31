@@ -69,10 +69,10 @@ export default function HeroCarousel({ listings }) {
 
       {count > 1 && (
         <>
-          <button aria-label="Previous" onClick={prev} className={`${arrowClass} -left-4`}>
+          <button aria-label="Previous" onClick={prev} className={`${arrowClass} -left-2`}>
             <ChevronLeft size={22} />
           </button>
-          <button aria-label="Next" onClick={next} className={`${arrowClass} -right-4`}>
+          <button aria-label="Next" onClick={next} className={`${arrowClass} -right-2`}>
             <ChevronRight size={22} />
           </button>
         </>
