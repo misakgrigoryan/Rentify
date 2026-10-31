@@ -68,7 +68,7 @@ export default function Home() {
 
       <section className="mx-auto max-w-6xl px-4 py-14">
         <h2 className="text-2xl font-extrabold md:text-3xl">{t("home.categories")}</h2>
-        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-5">
+        <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {Object.keys(CATEGORY_ICONS).map((c, i) => {
             const Icon = CATEGORY_ICONS[c];
             return (
