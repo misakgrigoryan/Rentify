@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import Button from "../ui/Button.jsx";
-import { Repeat } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import useAuth from "../../hooks/useAuth.js";
 import i18n from "../../i18n/index.js";
 
@@ -40,7 +40,7 @@ export default function Navbar() {
             transition={{ type: "spring", stiffness: 200, damping: 12 }}
             className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white"
           >
-            <Repeat size={20} />
+            <KeyRound size={20} />
           </motion.span>
           <span className="text-xl font-bold text-primary">Rentify</span>
         </Link>
