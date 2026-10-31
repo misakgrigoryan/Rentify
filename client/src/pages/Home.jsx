@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { ArrowRight, Plus, ShieldCheck, Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, Plus, ShieldCheck, Sparkles } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import ListingCard from "../components/listing/ListingCard.jsx";
+import HeroCarousel from "../components/home/HeroCarousel.jsx";
 import { CATEGORY_ICONS } from "../lib/categories.js";
-import { localized } from "../lib/i18nContent.js";
 import api from "../lib/api.js";
 
 const CATEGORY_COLORS = {
@@ -16,7 +16,7 @@ const CATEGORY_COLORS = {
   Sports: "bg-success/10 text-success",
 };
 
-// Small uppercase label shown above each section heading
+// Small label shown above each section heading
 function Eyebrow({ children }) {
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
@@ -26,22 +26,20 @@ function Eyebrow({ children }) {
 }
 
 export default function Home() {
-  const { t, i18n } = useTranslation();
-  const [featured, setFeatured] = useState([]);
+  const { t } = useTranslation();
+  const [listings, setListings] = useState([]);
 
   useEffect(() => {
     api
-      .get("/listings", { params: { limit: 4 } })
-      .then((res) => setFeatured(res.data.listings))
-      .catch(() => setFeatured([]));
+      .get("/listings", { params: { limit: 6 } })
+      .then((res) => setListings(res.data.listings))
+      .catch(() => setListings([]));
   }, []);
 
   const steps = [t("home.step1"), t("home.step2"), t("home.step3")];
-  const preview = featured[0];
 
   return (
     <div className="overflow-hidden">
-      {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#8f3b25] px-4 py-20 text-white">
         <motion.div
           aria-hidden
@@ -93,45 +91,10 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Floating preview card built from a real listing */}
-          {preview && (
-            <motion.div
-              initial={{ opacity: 0, y: 40, rotate: 4 }}
-              animate={{ opacity: 1, y: 0, rotate: 2 }}
-              transition={{ delay: 0.4, type: "spring", stiffness: 120, damping: 14 }}
-              className="relative mx-auto w-full max-w-sm"
-            >
-              <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}>
-                <div className="overflow-hidden rounded-3xl bg-surface text-text shadow-2xl">
-                  <div className="flex h-56 items-center justify-center bg-bg p-4">
-                    {preview.imageUrls?.[0] ? (
-                      <img src={preview.imageUrls[0]} alt="" className="h-full w-full object-contain" />
-                    ) : (
-                      <Sparkles size={64} className="text-primary" />
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <p className="text-xs font-bold uppercase tracking-wider text-primary">{t(`categories.${preview.category}`)}</p>
-                    <h3 className="mt-1 text-lg font-extrabold">{localized(preview, "title", i18n.language)}</h3>
-                    <p className="mt-1 flex items-center gap-1 text-sm text-muted">
-                      <MapPin size={14} /> {preview.location}
-                    </p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="rounded-2xl bg-primary px-4 py-2 text-lg font-extrabold text-white">
-                        {Number(preview.price).toLocaleString()} {preview.currency}
-                      </span>
-                      <span className="text-sm text-muted">/ {preview.unit === "HOUR" ? t("common.hour") : t("common.day")}</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-              <div aria-hidden className="absolute -bottom-6 -left-6 -z-10 h-24 w-24 rounded-3xl bg-accent/60 blur-xl" />
-            </motion.div>
-          )}
+          <HeroCarousel listings={listings} />
         </div>
       </section>
 
-      {/* Categories */}
       <section className="mx-auto max-w-6xl px-4 py-16">
         <Eyebrow>{t("home.categories")}</Eyebrow>
         <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{t("home.categories")}</h2>
@@ -164,22 +127,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured */}
       <section className="mx-auto max-w-6xl px-4 pb-16">
         <Eyebrow>{t("home.featured")}</Eyebrow>
         <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{t("home.featured")}</h2>
-        {featured.length === 0 ? (
+        {listings.length === 0 ? (
           <p className="mt-6 text-muted">{t("home.noListings")}</p>
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((listing, i) => (
+            {listings.slice(0, 4).map((listing, i) => (
               <ListingCard key={listing.id} listing={listing} index={i} />
             ))}
           </div>
         )}
       </section>
 
-      {/* How it works */}
       <section className="relative mx-auto max-w-6xl px-4 pb-24">
         <Eyebrow>{t("home.howItWorks")}</Eyebrow>
         <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{t("home.howItWorks")}</h2>
