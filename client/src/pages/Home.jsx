@@ -8,6 +8,7 @@ import ListingCard from "../components/listing/ListingCard.jsx";
 import HeroCarousel from "../components/home/HeroCarousel.jsx";
 import StatsStrip from "../components/home/StatsStrip.jsx";
 import PopularStrip from "../components/home/PopularStrip.jsx";
+import Testimonials from "../components/home/Testimonials.jsx";
 import { CATEGORY_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
 
@@ -144,6 +145,8 @@ export default function Home() {
           </div>
         )}
       </section>
+
+      <Testimonials />
 
       <section className="relative mx-auto max-w-6xl px-4 pb-24">
         <Eyebrow>{t("home.howItWorks")}</Eyebrow>

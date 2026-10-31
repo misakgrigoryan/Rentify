@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth.routes.js";
 import listingRoutes from "./routes/listing.routes.js";
 import bookingRoutes from "./routes/booking.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
+import testimonialRoutes from "./routes/testimonial.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/listings", listingRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use((req, res) => {
