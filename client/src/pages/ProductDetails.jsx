@@ -95,7 +95,7 @@ export default function ProductDetails() {
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{t(`categories.${listing.category}`)}</span>
           <FavoriteButton listingId={listing.id} inline />
           <h1 className="mt-3 text-4xl font-extrabold leading-tight">{title}</h1>
-          <p className="mt-2 flex items-center gap-1 text-muted"><MapPin size={16} /> {listing.location} · {t("product.listedBy")} {listing.owner?.name}</p>
+          <p className="mt-2 flex items-center gap-1 text-muted"><MapPin size={16} /> {listing.location} · {t("product.listedBy")} <Link to={`/owners/${listing.owner?.id}`} className="font-semibold text-primary underline">{listing.owner?.name}</Link></p>
           <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-accent">
             <Star size={16} />
             {average !== null ? t("product.averageLine", { stars: stars(average), average, count: reviews.length }) : t("product.noRating")}
