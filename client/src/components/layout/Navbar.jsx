@@ -20,6 +20,7 @@ export default function Navbar() {
   const links = [
     { to: "/products", label: t("nav.browse") },
     { to: "/dashboard", label: t("nav.dashboard") },
+    { to: "/favorites", label: t("nav.favorites") },
     { to: "/messages", label: t("nav.messages") },
     ...(isAdmin ? [{ to: "/admin", label: t("nav.admin") }] : []),
   ];

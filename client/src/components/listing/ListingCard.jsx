@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
 import { getCategoryIcon } from "../../lib/categories.js";
 import { localized } from "../../lib/i18nContent.js";
+import FavoriteButton from "./FavoriteButton.jsx";
 
 // index staggers the entrance, so cards appear one after another
 export default function ListingCard({ listing, index = 0 }) {
@@ -26,6 +27,7 @@ export default function ListingCard({ listing, index = 0 }) {
           className="h-full overflow-hidden rounded-3xl bg-surface shadow-sm ring-1 ring-border transition-shadow hover:shadow-xl hover:shadow-primary/15"
         >
           <div className="relative flex h-44 items-center justify-center overflow-hidden bg-accent/20">
+            <FavoriteButton listingId={listing.id} />
             {image ? (
               <img
                 src={image}

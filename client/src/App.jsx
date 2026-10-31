@@ -13,6 +13,7 @@ import Profile from "./pages/Profile.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Admin from "./pages/Admin.jsx";
 import Messages from "./pages/Messages.jsx";
+import Favorites from "./pages/Favorites.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/favorites" element={<Favorites />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

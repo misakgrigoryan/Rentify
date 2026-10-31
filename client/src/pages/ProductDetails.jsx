@@ -6,6 +6,7 @@ import { MapPin, Star, CalendarPlus } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import Card from "../components/ui/Card.jsx";
+import FavoriteButton from "../components/listing/FavoriteButton.jsx";
 import BackButton from "../components/ui/BackButton.jsx";
 import useAuth from "../hooks/useAuth.js";
 import { getCategoryIcon } from "../lib/categories.js";
@@ -90,6 +91,7 @@ export default function ProductDetails() {
 
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{t(`categories.${listing.category}`)}</span>
+          <FavoriteButton listingId={listing.id} inline />
           <h1 className="mt-3 text-4xl font-extrabold leading-tight">{title}</h1>
           <p className="mt-2 flex items-center gap-1 text-muted"><MapPin size={16} /> {listing.location} · {t("product.listedBy")} {listing.owner?.name}</p>
           <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-accent">

@@ -6,7 +6,8 @@
     "admin": "Admin",
     "login": "Log in",
     "signup": "Sign up",
-    "logout": "Log out"
+    "logout": "Log out",
+    "favorites": "Favorites"
   },
   "common": {
     "loading": "Loading...",
@@ -224,5 +225,12 @@
   "footer": {
     "rights": "© 2026 Rentify",
     "tagline": "Rent anything, for a day or an hour"
+  },
+  "favorites": {
+    "title": "Favorites",
+    "empty": "You have not saved any items yet.",
+    "loginPrompt": "to see your saved items.",
+    "save": "Save",
+    "saved": "Saved"
   }
 }
