@@ -6,6 +6,7 @@ import { MapPin, Star, CalendarPlus } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import Card from "../components/ui/Card.jsx";
+import BackButton from "../components/ui/BackButton.jsx";
 import useAuth from "../hooks/useAuth.js";
 import { getCategoryIcon } from "../lib/categories.js";
 import { localized } from "../lib/i18nContent.js";
@@ -77,6 +78,7 @@ export default function ProductDetails() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
+      <BackButton />
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="flex h-80 items-center justify-center overflow-hidden rounded-3xl bg-accent/20 shadow-sm ring-1 ring-border sm:h-[420px]">
           {listing.imageUrls?.[0] ? (
