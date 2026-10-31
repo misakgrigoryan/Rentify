@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { MapPin, Star } from "lucide-react";
 import { getCategoryIcon } from "../../lib/categories.js";
+import { localized } from "../../lib/i18nContent.js";
 
 // index staggers the entrance, so cards appear one after another
 export default function ListingCard({ listing, index = 0 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const Icon = getCategoryIcon(listing.category);
   const image = listing.imageUrls?.[0];
   const unit = listing.unit === "HOUR" ? t("common.hour") : t("common.day");
@@ -28,7 +29,7 @@ export default function ListingCard({ listing, index = 0 }) {
             {image ? (
               <img
                 src={image}
-                alt={listing.title}
+                alt={localized(listing, "title", i18n.language)}
                 className="h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-110"
               />
             ) : (
@@ -43,7 +44,7 @@ export default function ListingCard({ listing, index = 0 }) {
           </div>
 
           <div className="p-4">
-            <h3 className="font-bold text-text">{listing.title}</h3>
+            <h3 className="font-bold text-text">{localized(listing, "title", i18n.language)}</h3>
             <p className="mt-1 flex items-center gap-1 text-sm text-muted">
               <MapPin size={14} /> {listing.location}
               <span className="mx-1">·</span>

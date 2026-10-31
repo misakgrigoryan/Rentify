@@ -6,6 +6,7 @@ import { Pencil, Trash2, MapPin, Calendar } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
+import { localized } from "../lib/i18nContent.js";
 
 const TABS = ["mine", "requests", "active", "finished"];
 const ACTIVE = ["PENDING", "ACCEPTED", "ACTIVE"];
@@ -22,7 +23,7 @@ const statusStyles = {
 };
 
 export default function Dashboard() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, loading } = useAuth();
   const [tab, setTab] = useState("mine");
   const [items, setItems] = useState([]);
@@ -129,7 +130,7 @@ export default function Dashboard() {
               {items.map((listing, i) => (
                 <motion.div key={listing.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={rowClass}>
                   <div>
-                    <Link to={`/products/${listing.id}`} className="font-bold text-text hover:text-primary">{listing.title}</Link>
+                    <Link to={`/products/${listing.id}`} className="font-bold text-text hover:text-primary">{localized(listing, "title", i18n.language)}</Link>
                     <p className="mt-1 flex items-center gap-1 text-sm text-muted"><MapPin size={14} /> {listing.location} · {Number(listing.price).toLocaleString()} {listing.currency} / {listing.unit === "HOUR" ? t("common.hour") : t("common.day")}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -148,7 +149,7 @@ export default function Dashboard() {
             {visible.map((b, i) => (
               <motion.div key={b.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={rowClass}>
                 <div>
-                  <Link to={`/products/${b.listing.id}`} className="font-bold text-text hover:text-primary">{b.listing.title}</Link>
+                  <Link to={`/products/${b.listing.id}`} className="font-bold text-text hover:text-primary">{localized(b.listing, "title", i18n.language)}</Link>
                   <p className="mt-1 flex items-center gap-1 text-sm text-muted">
                     <Calendar size={14} /> {new Date(b.startDate).toLocaleString()} → {new Date(b.endDate).toLocaleString()}
                   </p>
