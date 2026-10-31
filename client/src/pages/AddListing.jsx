@@ -9,8 +9,12 @@ import useAuth from "../hooks/useAuth.js";
 import { CATEGORY_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
 
-const emptyForm = { title: "", description: "", price: "", currency: "AMD", unit: "DAY", category: "Tools", location: "", imageUrl: "" };
+const emptyForm = {
+  title: "", description: "", price: "", currency: "AMD", unit: "DAY", category: "Tools", location: "", imageUrl: "",
+  titleHy: "", titleRu: "", descriptionHy: "", descriptionRu: "",
+};
 const selectClass = "rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
+const areaClass = "rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
 
 export default function AddListing() {
   const { t } = useTranslation();
@@ -32,6 +36,8 @@ export default function AddListing() {
           title: l.title, description: l.description, price: String(Number(l.price)),
           currency: l.currency, unit: l.unit, category: l.category, location: l.location,
           imageUrl: l.imageUrls?.[0] || "",
+          titleHy: l.titleHy || "", titleRu: l.titleRu || "",
+          descriptionHy: l.descriptionHy || "", descriptionRu: l.descriptionRu || "",
         });
         setReady(true);
       })
@@ -48,6 +54,8 @@ export default function AddListing() {
       title: form.title, description: form.description, price: form.price,
       currency: form.currency, unit: form.unit, category: form.category, location: form.location,
       imageUrls: form.imageUrl ? [form.imageUrl] : [],
+      titleHy: form.titleHy, titleRu: form.titleRu,
+      descriptionHy: form.descriptionHy, descriptionRu: form.descriptionRu,
     };
     try {
       const res = isEdit ? await api.put(`/listings/${id}`, body) : await api.post("/listings", body);
@@ -79,7 +87,7 @@ export default function AddListing() {
 
         <div className="flex flex-col gap-1.5">
           <label htmlFor="description" className="text-sm font-semibold">{t("listingForm.description")}</label>
-          <textarea id="description" name="description" rows={4} value={form.description} onChange={handleChange} required className="rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15" />
+          <textarea id="description" name="description" rows={4} value={form.description} onChange={handleChange} required className={areaClass} />
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -107,6 +115,21 @@ export default function AddListing() {
 
         <Input id="location" name="location" label={t("listingForm.location")} value={form.location} onChange={handleChange} required />
         <Input id="imageUrl" name="imageUrl" label={t("listingForm.photoUrl")} placeholder="https://..." value={form.imageUrl} onChange={handleChange} />
+
+        <div className="grid gap-5 rounded-2xl bg-bg p-5">
+          <p className="text-sm font-bold text-primary">{t("listingForm.translationsTitle")}</p>
+          <p className="-mt-3 text-xs text-muted">{t("listingForm.translationsHint")}</p>
+          <Input id="titleHy" name="titleHy" label={`${t("listingForm.title")} (HY)`} value={form.titleHy} onChange={handleChange} />
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="descriptionHy" className="text-sm font-semibold">{t("listingForm.description")} (HY)</label>
+            <textarea id="descriptionHy" name="descriptionHy" rows={3} value={form.descriptionHy} onChange={handleChange} className={areaClass} />
+          </div>
+          <Input id="titleRu" name="titleRu" label={`${t("listingForm.title")} (RU)`} value={form.titleRu} onChange={handleChange} />
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="descriptionRu" className="text-sm font-semibold">{t("listingForm.description")} (RU)</label>
+            <textarea id="descriptionRu" name="descriptionRu" rows={3} value={form.descriptionRu} onChange={handleChange} className={areaClass} />
+          </div>
+        </div>
 
         {error && <p className="rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</p>}
 

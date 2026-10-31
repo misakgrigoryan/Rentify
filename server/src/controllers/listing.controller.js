@@ -33,6 +33,14 @@ function parseListing(body, partial) {
     if (!UNITS.includes(body.unit)) return { error: "Unit must be DAY or HOUR" };
     data.unit = body.unit;
   }
+  // Optional Armenian and Russian text, saved only when the owner fills it in
+  for (const field of ["titleHy", "titleRu", "descriptionHy", "descriptionRu"]) {
+    if (body[field] !== undefined) {
+      const value = String(body[field]).trim();
+      data[field] = value || null;
+    }
+  }
+
   if (body.imageUrls !== undefined) {
     data.imageUrls = Array.isArray(body.imageUrls) ? body.imageUrls.map(String) : [];
   }

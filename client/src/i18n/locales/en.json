@@ -196,7 +196,9 @@
     "loadingListing": "Loading listing...",
     "loadError": "Could not load this listing",
     "loginFirst": "Please log in first.",
-    "saveError": "Could not save the listing"
+    "saveError": "Could not save the listing",
+    "translationsTitle": "Armenian and Russian (optional)",
+    "translationsHint": "Leave empty to show your text in every language."
   },
   "admin": {
     "title": "Admin",
