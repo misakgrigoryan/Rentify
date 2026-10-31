@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
-import { MapPin, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Sparkles } from "lucide-react";
 import { localized } from "../../lib/i18nContent.js";
 
-// Cycles through listings one at a time. Clicking the card opens that listing.
+// Cycles through listings automatically. Arrows and dots let the user skip.
+// Clicking the card opens that listing.
 export default function HeroCarousel({ listings }) {
   const { t, i18n } = useTranslation();
   const [index, setIndex] = useState(0);
@@ -15,11 +16,17 @@ export default function HeroCarousel({ listings }) {
     if (count < 2) return;
     const timer = setInterval(() => setIndex((i) => (i + 1) % count), 3500);
     return () => clearInterval(timer);
-  }, [count]);
+  }, [count, index]);
 
   if (count === 0) return null;
   const current = index % count;
   const item = listings[current];
+
+  const next = () => setIndex((i) => (i + 1) % count);
+  const prev = () => setIndex((i) => (i - 1 + count) % count);
+
+  const arrowClass =
+    "absolute top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-primary shadow-lg transition-transform hover:scale-110 active:scale-95";
 
   return (
     <div className="relative mx-auto w-full max-w-sm">
@@ -59,6 +66,17 @@ export default function HeroCarousel({ listings }) {
           </motion.div>
         </motion.div>
       </AnimatePresence>
+
+      {count > 1 && (
+        <>
+          <button aria-label="Previous" onClick={prev} className={`${arrowClass} -left-4`}>
+            <ChevronLeft size={22} />
+          </button>
+          <button aria-label="Next" onClick={next} className={`${arrowClass} -right-4`}>
+            <ChevronRight size={22} />
+          </button>
+        </>
+      )}
 
       <div className="mt-5 flex justify-center gap-2">
         {listings.map((l, i) => (
