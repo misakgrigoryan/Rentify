@@ -8,6 +8,7 @@ import Input from "../components/ui/Input.jsx";
 import Card from "../components/ui/Card.jsx";
 import useAuth from "../hooks/useAuth.js";
 import { getCategoryIcon } from "../lib/categories.js";
+import { localized } from "../lib/i18nContent.js";
 import api from "../lib/api.js";
 
 function stars(n) {
@@ -16,7 +17,7 @@ function stars(n) {
 }
 
 export default function ProductDetails() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const { user } = useAuth();
   const [listing, setListing] = useState(null);
@@ -71,13 +72,15 @@ export default function ProductDetails() {
   const Icon = getCategoryIcon(listing.category);
   const isOwner = user && user.id === listing.ownerId;
   const unit = listing.unit === "HOUR" ? t("common.hour") : t("common.day");
+  const title = localized(listing, "title", i18n.language);
+  const description = localized(listing, "description", i18n.language);
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="flex h-80 items-center justify-center overflow-hidden rounded-3xl bg-accent/20 shadow-sm ring-1 ring-border sm:h-[420px]">
           {listing.imageUrls?.[0] ? (
-            <img src={listing.imageUrls[0]} alt={listing.title} className="h-full w-full object-contain p-4" />
+            <img src={listing.imageUrls[0]} alt={title} className="h-full w-full object-contain p-4" />
           ) : (
             <Icon size={120} className="text-primary" />
           )}
@@ -85,7 +88,7 @@ export default function ProductDetails() {
 
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{t(`categories.${listing.category}`)}</span>
-          <h1 className="mt-3 text-4xl font-extrabold leading-tight">{listing.title}</h1>
+          <h1 className="mt-3 text-4xl font-extrabold leading-tight">{title}</h1>
           <p className="mt-2 flex items-center gap-1 text-muted"><MapPin size={16} /> {listing.location} · {t("product.listedBy")} {listing.owner?.name}</p>
           <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-accent">
             <Star size={16} />
@@ -95,7 +98,7 @@ export default function ProductDetails() {
             {Number(listing.price).toLocaleString()} {listing.currency}
             <span className="text-base font-normal text-muted"> / {unit}</span>
           </p>
-          <p className="mt-5 whitespace-pre-line leading-relaxed text-text/80">{listing.description}</p>
+          <p className="mt-5 whitespace-pre-line leading-relaxed text-text/80">{description}</p>
 
           <div className="mt-8">
             {isOwner ? (
