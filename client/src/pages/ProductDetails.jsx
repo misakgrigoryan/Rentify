@@ -7,6 +7,7 @@ import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import Card from "../components/ui/Card.jsx";
 import FavoriteButton from "../components/listing/FavoriteButton.jsx";
+import PriceQuote from "../components/listing/PriceQuote.jsx";
 import ImageZoom from "../components/listing/ImageZoom.jsx";
 import BackButton from "../components/ui/BackButton.jsx";
 import useAuth from "../hooks/useAuth.js";
@@ -118,6 +119,7 @@ export default function ProductDetails() {
                   <h2 className="flex items-center gap-2 font-bold"><CalendarPlus size={18} className="text-primary" /> {t("product.bookingTitle")}</h2>
                   <Input id="startDate" name="startDate" label={t("product.from")} type="datetime-local" value={dates.startDate} onChange={(e) => setDates({ ...dates, startDate: e.target.value })} required />
                   <Input id="endDate" name="endDate" label={t("product.to")} type="datetime-local" value={dates.endDate} onChange={(e) => setDates({ ...dates, endDate: e.target.value })} required />
+                  <PriceQuote listing={listing} start={dates.startDate} end={dates.endDate} />
                   {message && (
                     <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`rounded-2xl p-3 text-sm ${isError ? "bg-danger/10 text-danger" : "bg-success/10 text-success"}`}>{message}</motion.p>
                   )}
