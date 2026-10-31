@@ -6,6 +6,8 @@ import { ArrowRight, Plus, ShieldCheck, Sparkles } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import ListingCard from "../components/listing/ListingCard.jsx";
 import HeroCarousel from "../components/home/HeroCarousel.jsx";
+import StatsStrip from "../components/home/StatsStrip.jsx";
+import PopularStrip from "../components/home/PopularStrip.jsx";
 import { CATEGORY_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
 
@@ -95,6 +97,8 @@ export default function Home() {
         </div>
       </section>
 
+      <StatsStrip listings={listings} />
+      <PopularStrip listings={listings} />
       <section className="mx-auto max-w-6xl px-4 py-16">
         <Eyebrow>{t("home.categories")}</Eyebrow>
         <h2 className="mt-3 text-3xl font-extrabold md:text-4xl">{t("home.categories")}</h2>
