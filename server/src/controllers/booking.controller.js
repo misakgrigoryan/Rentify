@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import { sendMail, bookingRequestEmail, bookingDecisionEmail } from "../utils/notify.js";
 
 // Bookings in these statuses block the dates
 const BLOCKING = ["PENDING", "ACCEPTED", "ACTIVE"];
@@ -71,6 +72,21 @@ export const createBooking = async (req, res, next) => {
       { isolationLevel: "Serializable" }
     );
 
+    // Email the owner after the booking is saved. A failed email never fails the request.
+    if (result.status === 201) {
+      const listing = await prisma.listing.findUnique({
+        where: { id: listingId },
+        include: { owner: { select: { email: true, name: true } } },
+      });
+      if (listing?.owner) {
+        sendMail(
+          listing.owner.email,
+          "New booking request on Rentify",
+          bookingRequestEmail(listing.owner.name, listing.title, req.user.name, start.toLocaleString(), end.toLocaleString())
+        );
+      }
+    }
+
     res.status(result.status).json(result.body);
   } catch (err) {
     next(err);
@@ -113,7 +129,7 @@ export const updateBookingStatus = async (req, res, next) => {
 
     const booking = await prisma.booking.findUnique({
       where: { id },
-      include: { listing: { select: { ownerId: true } } },
+      include: { listing: { select: { ownerId: true, title: true } } },
     });
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
@@ -135,6 +151,22 @@ export const updateBookingStatus = async (req, res, next) => {
       data: { status },
       include: bookingInclude,
     });
+
+    // Tell the renter when the owner accepts or rejects the request
+    if (isOwner && (status === "ACCEPTED" || status === "REJECTED")) {
+      const renter = await prisma.user.findUnique({
+        where: { id: booking.renterId },
+        select: { email: true, name: true },
+      });
+      if (renter) {
+        sendMail(
+          renter.email,
+          `Your Rentify request was ${status.toLowerCase()}`,
+          bookingDecisionEmail(renter.name, booking.listing.title, status)
+        );
+      }
+    }
+
     res.json({ booking: updated });
   } catch (err) {
     next(err);
