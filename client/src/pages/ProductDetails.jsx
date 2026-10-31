@@ -77,7 +77,7 @@ export default function ProductDetails() {
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="flex h-80 items-center justify-center overflow-hidden rounded-3xl bg-accent/20 shadow-sm ring-1 ring-border sm:h-[420px]">
           {listing.imageUrls?.[0] ? (
-            <img src={listing.imageUrls[0]} alt={listing.title} className="h-full w-full object-cover" />
+            <img src={listing.imageUrls[0]} alt={listing.title} className="h-full w-full object-contain p-4" />
           ) : (
             <Icon size={120} className="text-primary" />
           )}

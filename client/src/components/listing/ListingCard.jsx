@@ -29,7 +29,7 @@ export default function ListingCard({ listing, index = 0 }) {
               <img
                 src={image}
                 alt={listing.title}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-110"
               />
             ) : (
               <Icon
