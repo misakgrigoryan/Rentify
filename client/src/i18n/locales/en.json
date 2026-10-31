@@ -55,7 +55,14 @@
     "itemsFound": "{{count}} items found",
     "itemsFoundFree": "{{count}} items found free for these dates",
     "noMatch": "No items match your search.",
-    "loadError": "Could not load listings"
+    "loadError": "Could not load listings",
+    "city": "City",
+    "allCities": "All cities",
+    "sort": "Sort by",
+    "sortNewest": "Newest",
+    "sortPriceLow": "Price: low to high",
+    "sortPriceHigh": "Price: high to low",
+    "sortRating": "Best rated"
   },
   "listing": {
     "listedBy": "Listed by",

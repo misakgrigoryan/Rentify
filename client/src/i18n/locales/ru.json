@@ -55,7 +55,14 @@
     "itemsFound": "Найдено: {{count}}",
     "itemsFoundFree": "Свободно на эти даты: {{count}}",
     "noMatch": "По вашему запросу ничего не найдено.",
-    "loadError": "Не удалось загрузить объявления"
+    "loadError": "Не удалось загрузить объявления",
+    "city": "Город",
+    "allCities": "Все города",
+    "sort": "Сортировать",
+    "sortNewest": "Сначала новые",
+    "sortPriceLow": "Цена: по возрастанию",
+    "sortPriceHigh": "Цена: по убыванию",
+    "sortRating": "По рейтингу"
   },
   "listing": {
     "listedBy": "Автор:",
