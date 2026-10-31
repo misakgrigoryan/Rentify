@@ -60,6 +60,7 @@ model User {
   reviewsGiven Review[]   @relation("Reviewer")
   reviewsGot   Review[]   @relation("Reviewed")
   messagesSent Message[]
+  favorites    Favorite[]
 }
 
 model Listing {
@@ -83,7 +84,8 @@ model Listing {
   owner    User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId  Int
 
-  bookings Booking[]
+  bookings  Booking[]
+  favorites Favorite[]
   reviews  Review[]
 
   @@index([category])
@@ -138,4 +140,16 @@ model Message {
   senderId   Int
 
   receiverId Int
+}
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  listingId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, listingId])
 }
