@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, CalendarRange, X, MapPin, ArrowUpDown } from "lucide-react";
 import ListingCard from "../components/listing/ListingCard.jsx";
+import ListingSkeleton from "../components/listing/ListingSkeleton.jsx";
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
 import { CATEGORY_ICONS } from "../lib/categories.js";
@@ -159,7 +160,11 @@ export default function Products() {
         <div>
           {error && <p className="mb-3 rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</p>}
           <p className="mb-4 text-sm font-semibold text-muted">{loading ? t("common.loading") : countText}</p>
-          {!loading && visible.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => <ListingSkeleton key={i} />)}
+            </div>
+          ) : visible.length === 0 ? (
             <motion.p initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-3xl bg-surface p-10 text-center text-muted shadow-sm ring-1 ring-border">
               {t("browse.noMatch")}
             </motion.p>
