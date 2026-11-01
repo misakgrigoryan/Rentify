@@ -6,6 +6,7 @@ import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
 import useAuth from "../hooks/useAuth.js";
+import ImageUpload from "../components/listing/ImageUpload.jsx";
 import { CATEGORY_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
 
@@ -114,7 +115,7 @@ export default function AddListing() {
         </div>
 
         <Input id="location" name="location" label={t("listingForm.location")} value={form.location} onChange={handleChange} required />
-        <Input id="imageUrl" name="imageUrl" label={t("listingForm.photoUrl")} placeholder="https://..." value={form.imageUrl} onChange={handleChange} />
+        <ImageUpload value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} />
 
         <div className="grid gap-5 rounded-2xl bg-bg p-5">
           <p className="text-sm font-bold text-primary">{t("listingForm.translationsTitle")}</p>

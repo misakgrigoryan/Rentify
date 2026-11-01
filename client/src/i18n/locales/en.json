@@ -245,5 +245,12 @@
     "button": "Share",
     "copy": "Copy link",
     "copied": "Link copied"
+  },
+  "upload": {
+    "label": "Photo",
+    "choose": "Tap to take or choose a photo",
+    "uploading": "Uploading...",
+    "remove": "Remove photo",
+    "error": "Could not upload the photo"
   }
 }
