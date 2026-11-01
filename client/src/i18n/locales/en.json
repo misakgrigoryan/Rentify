@@ -239,5 +239,10 @@
     "loginPrompt": "to see your saved items.",
     "save": "Save",
     "saved": "Saved"
+  },
+  "share": {
+    "button": "Share",
+    "copy": "Copy link",
+    "copied": "Link copied"
   }
 }
