@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Trash2, MapPin, Calendar } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
-import useAuth from "../hooks/useAuth.js";
 import StatusBadge from "../components/ui/StatusBadge.jsx";
+import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 import { localized } from "../lib/i18nContent.js";
 
@@ -13,14 +13,15 @@ const TABS = ["mine", "requests", "active", "finished"];
 const ACTIVE = ["PENDING", "ACCEPTED", "ACTIVE"];
 const FINISHED = ["COMPLETED", "REJECTED", "CANCELLED"];
 
-const statusStyles = {
-  PENDING: "bg-accent/25 text-warning",
-  APPROVED: "bg-success/15 text-success",
-  REJECTED: "bg-danger/15 text-danger",
-  ACCEPTED: "bg-info/15 text-info",
-  ACTIVE: "bg-info/15 text-info",
-  COMPLETED: "bg-success/15 text-success",
-  CANCELLED: "bg-border text-muted",
+// Colored strip on the left edge of each row, matching its status
+const barColors = {
+  PENDING: "bg-warning",
+  APPROVED: "bg-success",
+  REJECTED: "bg-danger",
+  ACCEPTED: "bg-info",
+  ACTIVE: "bg-info",
+  COMPLETED: "bg-success",
+  CANCELLED: "bg-muted",
 };
 
 export default function Dashboard() {
@@ -83,7 +84,7 @@ export default function Dashboard() {
     : tab === "finished" ? items.filter((b) => FINISHED.includes(b.status))
     : items;
 
-  const rowClass = "flex flex-col gap-4 rounded-3xl bg-surface p-5 shadow-sm ring-1 ring-border transition-shadow hover:shadow-lg sm:flex-row sm:items-center sm:justify-between";
+  const rowClass = "relative flex flex-col gap-4 overflow-hidden rounded-3xl bg-surface p-5 pl-7 shadow-sm ring-1 ring-border transition-shadow hover:shadow-lg sm:flex-row sm:items-center sm:justify-between";
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
@@ -130,6 +131,7 @@ export default function Dashboard() {
             <div className="flex flex-col gap-4">
               {items.map((listing, i) => (
                 <motion.div key={listing.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={rowClass}>
+                  <span className={`absolute inset-y-0 left-0 w-1.5 ${barColors[listing.status] || "bg-primary"}`} />
                   <div>
                     <Link to={`/products/${listing.id}`} className="font-bold text-text hover:text-primary">{localized(listing, "title", i18n.language)}</Link>
                     <p className="mt-1 flex items-center gap-1 text-sm text-muted"><MapPin size={14} /> {listing.location} · {Number(listing.price).toLocaleString()} {listing.currency} / {listing.unit === "HOUR" ? t("common.hour") : t("common.day")}</p>
@@ -149,6 +151,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-4">
             {visible.map((b, i) => (
               <motion.div key={b.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }} className={rowClass}>
+                <span className={`absolute inset-y-0 left-0 w-1.5 ${barColors[b.status] || "bg-primary"}`} />
                 <div>
                   <Link to={`/products/${b.listing.id}`} className="font-bold text-text hover:text-primary">{localized(b.listing, "title", i18n.language)}</Link>
                   <p className="mt-1 flex items-center gap-1 text-sm text-muted">
