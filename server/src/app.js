@@ -10,6 +10,7 @@ import reviewRoutes from "./routes/review.routes.js";
 import testimonialRoutes from "./routes/testimonial.routes.js";
 import favoriteRoutes from "./routes/favorite.routes.js";
 import ownerRoutes from "./routes/owner.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
@@ -19,7 +20,7 @@ app.set("trust proxy", 1);
 
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL }));
-app.use(express.json({ limit: "100kb" }));
+app.use(express.json({ limit: "10mb" }));
 
 // Limit login, register and password-reset attempts to slow down guessing
 const authLimiter = rateLimit({
@@ -38,6 +39,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/owners", ownerRoutes);
+app.use("/api/uploads", uploadRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use((req, res) => {
