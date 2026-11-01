@@ -23,11 +23,11 @@ export default function ListingCard({ listing, index = 0 }) {
     >
       <Link to={`/products/${listing.id}`} className="group block h-full">
         <motion.div
-          whileHover={{ y: -8, rotate: -0.6 }}
+          whileHover={{ y: -12, rotate: -0.8, scale: 1.01 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="relative h-full overflow-hidden rounded-3xl bg-surface shadow-sm ring-1 ring-border transition-shadow hover:shadow-xl hover:shadow-primary/15"
         >
-          <div className="relative flex h-44 items-center justify-center overflow-hidden bg-accent/20">
+          <div className="relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-accent/30 via-bg to-primary/10">
             {image ? (
               <img
                 src={image}
