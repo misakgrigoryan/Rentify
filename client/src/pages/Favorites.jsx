@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
+import EmptyState from "../components/ui/EmptyState.jsx";
 import ListingCard from "../components/listing/ListingCard.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
 import useAuth from "../hooks/useAuth.js";
@@ -38,11 +38,10 @@ export default function Favorites() {
       ) : status === "error" ? (
         <p className="text-danger">{t("dashboard.loadError")}</p>
       ) : items.length === 0 ? (
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center gap-4 rounded-3xl bg-surface p-10 text-center shadow-sm ring-1 ring-border">
-          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-danger/10 text-danger"><Heart size={30} /></span>
-          <p className="text-muted">{t("favorites.empty")}</p>
+        <EmptyState icon={Heart} title={t("favorites.empty")}>
+          <p className="mb-5">{t("favorites.emptyHint")}</p>
           <Link to="/products"><Button>{t("home.browseItems")}</Button></Link>
-        </motion.div>
+        </EmptyState>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {items.map((listing, i) => (

@@ -238,7 +238,8 @@
     "empty": "You have not saved any items yet.",
     "loginPrompt": "to see your saved items.",
     "save": "Save",
-    "saved": "Saved"
+    "saved": "Saved",
+    "emptyHint": "Tap the heart on any item to save it here."
   },
   "share": {
     "button": "Share",

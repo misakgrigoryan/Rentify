@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Trash2, MapPin, Calendar } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import useAuth from "../hooks/useAuth.js";
+import StatusBadge from "../components/ui/StatusBadge.jsx";
 import api from "../lib/api.js";
 import { localized } from "../lib/i18nContent.js";
 
@@ -134,7 +135,7 @@ export default function Dashboard() {
                     <p className="mt-1 flex items-center gap-1 text-sm text-muted"><MapPin size={14} /> {listing.location} · {Number(listing.price).toLocaleString()} {listing.currency} / {listing.unit === "HOUR" ? t("common.hour") : t("common.day")}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusStyles[listing.status]}`}>{t(`status.${listing.status}`)}</span>
+                    <StatusBadge status={listing.status} />
                     <Link to={`/listings/${listing.id}/edit`}><Button variant="secondary" size="sm"><Pencil size={14} /> {t("common.edit")}</Button></Link>
                     <Button variant="danger" size="sm" onClick={() => deleteListing(listing.id)}><Trash2 size={14} /> {t("common.delete")}</Button>
                   </div>
@@ -156,7 +157,7 @@ export default function Dashboard() {
                   {tab === "requests" && <p className="text-sm text-muted">{t("dashboard.from", { name: b.renter.name })}</p>}
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusStyles[b.status]}`}>{t(`status.${b.status}`)}</span>
+                  <StatusBadge status={b.status} />
                   {tab === "requests" && b.status === "PENDING" && (
                     <>
                       <Button size="sm" onClick={() => changeBooking(b.id, "ACCEPTED")}>{t("actions.accept")}</Button>
