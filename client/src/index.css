@@ -37,3 +37,16 @@
 body {
   background: var(--color-bg);
 }
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* Terracotta text selection and scrollbar */
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 999px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }

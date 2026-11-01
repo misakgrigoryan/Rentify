@@ -12,6 +12,7 @@ export default function ListingCard({ listing, index = 0 }) {
   const Icon = getCategoryIcon(listing.category);
   const image = listing.imageUrls?.[0];
   const unit = listing.unit === "HOUR" ? t("common.hour") : t("common.day");
+  const title = localized(listing, "title", i18n.language);
 
   return (
     <motion.div
@@ -24,14 +25,13 @@ export default function ListingCard({ listing, index = 0 }) {
         <motion.div
           whileHover={{ y: -8, rotate: -0.6 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="h-full overflow-hidden rounded-3xl bg-surface shadow-sm ring-1 ring-border transition-shadow hover:shadow-xl hover:shadow-primary/15"
+          className="relative h-full overflow-hidden rounded-3xl bg-surface shadow-sm ring-1 ring-border transition-shadow hover:shadow-xl hover:shadow-primary/15"
         >
           <div className="relative flex h-44 items-center justify-center overflow-hidden bg-accent/20">
-            <FavoriteButton listingId={listing.id} />
             {image ? (
               <img
                 src={image}
-                alt={localized(listing, "title", i18n.language)}
+                alt={title}
                 className="h-full w-full object-contain p-3 transition-transform duration-500 group-hover:scale-110"
               />
             ) : (
@@ -45,18 +45,25 @@ export default function ListingCard({ listing, index = 0 }) {
             </span>
           </div>
 
-          <div className="p-4">
-            <h3 className="font-bold text-text">{localized(listing, "title", i18n.language)}</h3>
+          <FavoriteButton listingId={listing.id} />
+
+          <div className="relative p-4 pt-6">
+            {/* Price tag that overlaps the photo edge */}
+            <span className="absolute -top-5 right-4 rounded-2xl bg-primary px-3 py-1.5 text-sm font-extrabold text-white shadow-lg shadow-primary/30">
+              {Number(listing.price).toLocaleString()} {listing.currency}
+              <span className="font-normal opacity-80"> / {unit}</span>
+            </span>
+
+            <h3 className="font-bold text-text">{title}</h3>
             <p className="mt-1 flex items-center gap-1 text-sm text-muted">
               <MapPin size={14} /> {listing.location}
               <span className="mx-1">·</span>
               <Star size={14} className="text-accent" /> {listing.rating ? listing.rating : t("common.new")}
             </p>
-            <p className="mt-3 text-lg font-extrabold text-primary">
-              {Number(listing.price).toLocaleString()} {listing.currency}
-              <span className="text-sm font-normal text-muted"> / {unit}</span>
-            </p>
           </div>
+
+          {/* Shine that sweeps across on hover */}
+          <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
         </motion.div>
       </Link>
     </motion.div>

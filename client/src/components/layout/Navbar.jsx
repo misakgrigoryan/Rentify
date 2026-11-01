@@ -1,5 +1,5 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { KeyRound, Moon, Sun } from "lucide-react";
@@ -15,6 +15,15 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { t, i18n: inst } = useTranslation();
   const [dark, setDark] = useState(getTheme() === "dark");
+  const [scrolled, setScrolled] = useState(false);
+
+  // Switch to the glassy style once the page is scrolled
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isAdmin = user?.role === "SUPER_ADMIN" || user?.role === "MODERATOR";
   const links = [
@@ -42,7 +51,13 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-surface/90 backdrop-blur">
+    <header
+      className={`sticky top-0 z-40 border-b transition-all duration-300 ${
+        scrolled
+          ? "border-border/50 bg-surface/70 shadow-lg shadow-primary/10 backdrop-blur-xl"
+          : "border-border/70 bg-surface/90 backdrop-blur"
+      }`}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Link to="/" className="group flex items-center gap-2">
           <motion.span
@@ -68,10 +83,7 @@ export default function Navbar() {
                 <>
                   {link.label}
                   {isActive && (
-                    <motion.span
-                      layoutId="nav-underline"
-                      className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-primary"
-                    />
+                    <motion.span layoutId="nav-underline" className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-primary" />
                   )}
                 </>
               )}
