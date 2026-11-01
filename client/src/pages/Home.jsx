@@ -44,6 +44,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#8f3b25] px-4 py-20 text-white">
+        <motion.div aria-hidden animate={{ x: [0, 40, 0], y: [0, 25, 0] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="pointer-events-none absolute -left-24 top-1/3 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
         <motion.div
           aria-hidden
           animate={{ rotate: 360 }}
