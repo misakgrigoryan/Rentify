@@ -51,15 +51,13 @@ export default function Products() {
       .finally(() => setLoading(false));
   }, [search, category, dates.start, dates.end, t]);
 
-  // Cities come from the loaded listings, so the dropdown only shows places with items
   const cities = useMemo(
     () => [...new Set(listings.map((l) => l.location))].sort(),
     [listings]
   );
 
-  // Filter by city and by category (for the date-search results), then sort
   const visible = useMemo(() => {
-    let list = listings.filter((l) => {
+    const list = listings.filter((l) => {
       const byCity = city === "All" || l.location === city;
       const byCategory = hasDates ? category === "All" || l.category === category : true;
       const byTitle = !hasDates || l.title.toLowerCase().includes(search.toLowerCase());
@@ -160,9 +158,12 @@ export default function Products() {
         <div>
           {error && <p className="mb-3 rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</p>}
           <p className="mb-4 text-sm font-semibold text-muted">{loading ? t("common.loading") : countText}</p>
+
           {loading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => <ListingSkeleton key={i} />)}
+              {Array.from({ length: 6 }).map((_, i) => (
+                <ListingSkeleton key={i} />
+              ))}
             </div>
           ) : visible.length === 0 ? (
             <motion.p initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-3xl bg-surface p-10 text-center text-muted shadow-sm ring-1 ring-border">
