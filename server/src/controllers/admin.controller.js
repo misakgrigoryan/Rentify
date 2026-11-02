@@ -93,3 +93,29 @@ export const setBan = async (req, res, next) => {
     next(err);
   }
 };
+
+// Super Admin: permanently delete another user (their listings, bookings, reviews and favorites go with them)
+export const deleteUserByAdmin = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+      return res.status(400).json({ message: "Invalid user id" });
+    }
+    if (id === req.user.id) {
+      return res.status(400).json({ message: "You cannot delete your own account here" });
+    }
+
+    const target = await prisma.user.findUnique({ where: { id } });
+    if (!target) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (target.role === "SUPER_ADMIN") {
+      return res.status(403).json({ message: "Super Admin accounts cannot be deleted" });
+    }
+
+    await prisma.user.delete({ where: { id } });
+    res.json({ message: "User deleted" });
+  } catch (err) {
+    next(err);
+  }
+};

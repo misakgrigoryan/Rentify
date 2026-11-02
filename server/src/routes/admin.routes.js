@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { listAllListings, setListingStatus, listUsers, setBan } from "../controllers/admin.controller.js";
+import { listAllListings, setListingStatus, listUsers, setBan, deleteUserByAdmin } from "../controllers/admin.controller.js";
 import { requireAuth, requireRole } from "../middleware/auth.middleware.js";
 
 const router = Router();
@@ -13,5 +13,6 @@ router.patch("/listings/:id", setListingStatus);
 // Super Admin only
 router.get("/users", requireRole("SUPER_ADMIN"), listUsers);
 router.patch("/users/:id/ban", requireRole("SUPER_ADMIN"), setBan);
+router.delete("/users/:id", requireRole("SUPER_ADMIN"), deleteUserByAdmin);
 
 export default router;
