@@ -185,7 +185,13 @@
     "saved": "Profile saved.",
     "saveError": "Could not save your profile",
     "loginPrompt": "Please log in to see your profile.",
-    "emptyName": "Name cannot be empty"
+    "emptyName": "Name cannot be empty",
+    "deleteTitle": "Delete account",
+    "deleteText": "This permanently deletes your account, your listings, your bookings and your reviews. It cannot be undone.",
+    "deletePassword": "Confirm with your password",
+    "deleteButton": "Delete my account",
+    "deleteConfirm": "Delete your account permanently? This cannot be undone.",
+    "deleteError": "Could not delete the account"
   },
   "listingForm": {
     "addTitle": "Add a listing",
