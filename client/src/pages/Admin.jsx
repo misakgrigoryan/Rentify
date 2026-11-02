@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import { Trash2 } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
+import StatusBadge from "../components/ui/StatusBadge.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 
@@ -49,6 +51,18 @@ export default function Admin() {
     }
   }
 
+  async function removeUser(u) {
+    if (!window.confirm(t("admin.deleteConfirm", { name: u.name }))) return;
+    setMessage("");
+    try {
+      await api.delete(`/admin/users/${u.id}`);
+      setItems(items.filter((x) => x.id !== u.id));
+      setMessage(t("admin.deleted", { name: u.name }));
+    } catch (err) {
+      setMessage(err.response?.data?.message || t("admin.deleteError"));
+    }
+  }
+
   if (loading) return <PageShell title={t("admin.title")}><p className="text-muted">{t("common.loading")}</p></PageShell>;
   if (!isAdmin) {
     return (
@@ -76,7 +90,7 @@ export default function Admin() {
       </div>
 
       <AnimatePresence>
-        {message && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 rounded-2xl bg-danger/10 p-3 text-sm text-danger">{message}</motion.p>}
+        {message && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 rounded-2xl bg-primary/10 p-3 text-sm font-semibold text-primary">{message}</motion.p>}
       </AnimatePresence>
 
       <div className="mt-6 flex flex-col gap-4">
@@ -91,9 +105,10 @@ export default function Admin() {
             <motion.div key={l.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }} className={rowClass}>
               <div>
                 <p className="font-bold">{l.title}</p>
-                <p className="text-sm text-muted">{l.owner.name} · {l.location} · {t(`status.${l.status}`)}</p>
+                <p className="text-sm text-muted">{l.owner.name} · {l.location}</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <StatusBadge status={l.status} />
                 {l.status !== "APPROVED" && <Button size="sm" onClick={() => changeListing(l.id, "APPROVED")}>{t("admin.approve")}</Button>}
                 {l.status !== "REJECTED" && <Button size="sm" variant="danger" onClick={() => changeListing(l.id, "REJECTED")}>{t("admin.reject")}</Button>}
               </div>
@@ -106,9 +121,12 @@ export default function Admin() {
               <p className="text-sm text-muted">{u.email} · {t(`roles.${u.role}`)}{u.isBanned ? ` · ${t("admin.banned")}` : ""}</p>
             </div>
             {u.role !== "SUPER_ADMIN" && (
-              u.isBanned
-                ? <Button size="sm" variant="secondary" onClick={() => changeBan(u.id, false)}>{t("admin.unban")}</Button>
-                : <Button size="sm" variant="danger" onClick={() => changeBan(u.id, true)}>{t("admin.ban")}</Button>
+              <div className="flex flex-wrap items-center gap-2">
+                {u.isBanned
+                  ? <Button size="sm" variant="secondary" onClick={() => changeBan(u.id, false)}>{t("admin.unban")}</Button>
+                  : <Button size="sm" variant="secondary" onClick={() => changeBan(u.id, true)}>{t("admin.ban")}</Button>}
+                <Button size="sm" variant="danger" onClick={() => removeUser(u)}><Trash2 size={14} /> {t("admin.delete")}</Button>
+              </div>
             )}
           </motion.div>
         ))}

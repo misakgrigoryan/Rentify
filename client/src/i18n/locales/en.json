@@ -229,7 +229,11 @@
     "banned": "BANNED",
     "listingError": "Could not update the listing",
     "userError": "Could not update the user",
-    "loadError": "Could not load this tab."
+    "loadError": "Could not load this tab.",
+    "delete": "Delete",
+    "deleteConfirm": "Permanently delete {{name}} and all their listings, bookings and reviews? This cannot be undone.",
+    "deleted": "{{name}} was deleted",
+    "deleteError": "Could not delete the user"
   },
   "notFound": {
     "title": "Page not found",
