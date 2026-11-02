@@ -191,7 +191,11 @@
     "deletePassword": "Confirm with your password",
     "deleteButton": "Delete my account",
     "deleteConfirm": "Delete your account permanently? This cannot be undone.",
-    "deleteError": "Could not delete the account"
+    "deleteError": "Could not delete the account",
+    "photoTitle": "Profile photo",
+    "photoHint": "Choose a photo from your phone or camera.",
+    "photoSaved": "Photo saved.",
+    "photoError": "Could not save the photo"
   },
   "listingForm": {
     "addTitle": "Add a listing",

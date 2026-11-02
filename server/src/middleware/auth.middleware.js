@@ -21,7 +21,7 @@ export const requireAuth = async (req, res, next) => {
     // Load the user again, so banned or deleted users are blocked right away
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { id: true, name: true, email: true, role: true, isBanned: true },
+      select: { id: true, name: true, email: true, role: true, isBanned: true, avatarUrl: true },
     });
 
     if (!user) {

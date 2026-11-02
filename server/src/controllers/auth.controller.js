@@ -7,6 +7,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Only these fields are ever sent back to the frontend
 const publicUserFields = {
+  avatarUrl: true,
   id: true,
   name: true,
   email: true,
@@ -141,6 +142,9 @@ export const updateProfile = async (req, res, next) => {
         return res.status(400).json({ message: "Language must be en, hy or ru" });
       }
       data.language = req.body.language;
+    }
+    if (req.body.avatarUrl !== undefined) {
+      data.avatarUrl = String(req.body.avatarUrl).trim() || null;
     }
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ message: "Nothing to update" });

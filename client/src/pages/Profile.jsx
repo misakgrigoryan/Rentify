@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { Trash2 } from "lucide-react";
+import { Trash2, UserRound } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
+import ImageUpload from "../components/listing/ImageUpload.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 
@@ -17,6 +18,7 @@ export default function Profile() {
   const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", phone: "", language: "hy" });
+  const [avatar, setAvatar] = useState("");
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -24,8 +26,26 @@ export default function Profile() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (user) setForm({ name: user.name, phone: user.phone || "", language: user.language || "hy" });
+    if (!user) return;
+    setForm({ name: user.name, phone: user.phone || "", language: user.language || "hy" });
+    api.get("/auth/me")
+      .then((res) => setAvatar(res.data.user.avatarUrl || ""))
+      .catch(() => setAvatar(""));
   }, [user]);
+
+  // Saves the photo as soon as it is uploaded, or cleared
+  async function saveAvatar(url) {
+    setAvatar(url);
+    setMessage("");
+    try {
+      await api.put("/auth/profile", { avatarUrl: url });
+      setIsError(false);
+      setMessage(t("profile.photoSaved"));
+    } catch (err) {
+      setIsError(true);
+      setMessage(err.response?.data?.message || t("profile.photoError"));
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -79,6 +99,23 @@ export default function Profile() {
   return (
     <PageShell title={t("profile.title")} subtitle={user.email}>
       <div className="grid max-w-lg gap-8">
+        <motion.div className="grid gap-5 rounded-3xl bg-surface p-8 shadow-xl shadow-primary/10 ring-1 ring-border">
+          <div className="flex items-center gap-5">
+            <span className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary/10 text-primary ring-4 ring-surface shadow-md">
+              {avatar ? (
+                <img src={avatar} alt={user.name} className="h-full w-full object-cover" />
+              ) : (
+                <UserRound size={40} />
+              )}
+            </span>
+            <div>
+              <p className="font-bold">{t("profile.photoTitle")}</p>
+              <p className="text-sm text-muted">{t("profile.photoHint")}</p>
+            </div>
+          </div>
+          <ImageUpload value={avatar} onChange={saveAvatar} />
+        </motion.div>
+
         <motion.form onSubmit={handleSubmit} className="grid gap-5 rounded-3xl bg-surface p-8 shadow-xl shadow-primary/10 ring-1 ring-border">
           <Input id="name" name="name" label={t("profile.fullName")} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
           <Input id="phone" name="phone" label={t("profile.phone")} type="tel" placeholder="+374 77 123 456" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
