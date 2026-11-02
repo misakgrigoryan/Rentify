@@ -130,7 +130,11 @@ export const updateProfile = async (req, res, next) => {
       data.name = name;
     }
     if (req.body.phone !== undefined) {
-      data.phone = req.body.phone ? String(req.body.phone).trim() : null;
+      const cleanPhone = req.body.phone ? normalizePhone(req.body.phone) : null;
+      if (req.body.phone && !cleanPhone) {
+        return res.status(400).json({ message: "Phone must start with +374 or 0, followed by 8 digits" });
+      }
+      data.phone = cleanPhone;
     }
     if (req.body.language !== undefined) {
       if (!["en", "hy", "ru"].includes(req.body.language)) {

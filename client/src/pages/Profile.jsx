@@ -9,6 +9,9 @@ import PageShell from "../components/ui/PageShell.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 
+// Same rule as registration and the server: +374 or 0, then 8 digits
+const PHONE_OK = (value) => /^(\+374\d{8}|0\d{8})$/.test(value.replace(/[\s\-()]/g, ""));
+
 export default function Profile() {
   const { t, i18n } = useTranslation();
   const { user, loading, logout } = useAuth();
@@ -27,6 +30,11 @@ export default function Profile() {
   async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
+    if (form.phone && !PHONE_OK(form.phone)) {
+      setIsError(true);
+      setMessage(t("auth.phoneInvalid"));
+      return;
+    }
     setSubmitting(true);
     try {
       await api.put("/auth/profile", form);
@@ -73,7 +81,7 @@ export default function Profile() {
       <div className="grid max-w-lg gap-8">
         <motion.form onSubmit={handleSubmit} className="grid gap-5 rounded-3xl bg-surface p-8 shadow-xl shadow-primary/10 ring-1 ring-border">
           <Input id="name" name="name" label={t("profile.fullName")} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
-          <Input id="phone" name="phone" label={t("profile.phone")} type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <Input id="phone" name="phone" label={t("profile.phone")} type="tel" placeholder="+374 77 123 456" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
           <div className="flex flex-col gap-1.5">
             <label htmlFor="language" className="text-sm font-semibold">{t("profile.language")}</label>
             <select id="language" value={form.language} onChange={(e) => setForm({ ...form, language: e.target.value })} className="rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
