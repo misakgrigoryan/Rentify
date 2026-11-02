@@ -152,3 +152,31 @@ export const updateProfile = async (req, res, next) => {
     next(err);
   }
 };
+
+// Logged-in: delete my own account after confirming the password
+export const deleteAccount = async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    if (!password) {
+      return res.status(400).json({ message: "Enter your password to confirm" });
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: req.user.id } });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "SUPER_ADMIN") {
+      return res.status(403).json({ message: "Super Admin accounts cannot be deleted" });
+    }
+
+    const ok = await comparePassword(password, user.passwordHash);
+    if (!ok) {
+      return res.status(401).json({ message: "Wrong password" });
+    }
+
+    await prisma.user.delete({ where: { id: user.id } });
+    res.json({ message: "Account deleted" });
+  } catch (err) {
+    next(err);
+  }
+};
