@@ -8,6 +8,9 @@ import Input from "../components/ui/Input.jsx";
 import AuthBackdrop from "../components/ui/AuthBackdrop.jsx";
 import useAuth from "../hooks/useAuth.js";
 
+// Same rule as the server: +374 or 0, then 8 digits (spaces and dashes are ignored)
+const PHONE_OK = (value) => /^(\+374\d{8}|0\d{8})$/.test(value.replace(/[\s\-()]/g, ""));
+
 export default function Register() {
   const { t } = useTranslation();
   const { register } = useAuth();
@@ -21,12 +24,17 @@ export default function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    if (form.phone && !PHONE_OK(form.phone)) {
+      setError(t("auth.phoneInvalid"));
+      return;
+    }
     setSubmitting(true);
     try {
       await register(form);
       navigate("/");
     } catch (err) {
-      setError(err.response?.status === 409 ? t("auth.emailExists") : t("common.networkError"));
+      if (err.response?.status === 409) setError(t("auth.emailExists"));
+      else setError(err.response?.data?.message || t("common.networkError"));
     } finally {
       setSubmitting(false);
     }
@@ -48,7 +56,7 @@ export default function Register() {
           <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
             <Input id="name" name="name" label={t("auth.fullName")} value={form.name} onChange={handleChange} required />
             <Input id="email" name="email" label={t("auth.email")} type="email" value={form.email} onChange={handleChange} required />
-            <Input id="phone" name="phone" label={t("auth.phone")} type="tel" value={form.phone} onChange={handleChange} />
+            <Input id="phone" name="phone" label={t("auth.phone")} type="tel" placeholder="+374 77 123 456" value={form.phone} onChange={handleChange} />
             <Input id="password" name="password" label={t("auth.passwordHint")} type="password" value={form.password} onChange={handleChange} required />
             {error && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</motion.p>}
             <Button type="submit" className="w-full" loading={submitting}>{t("auth.registerButton")}</Button>

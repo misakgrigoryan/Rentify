@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
+import { normalizePhone } from "../utils/phone.js";
 import { hashPassword, comparePassword } from "../utils/password.js";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -18,6 +19,10 @@ const publicUserFields = {
 export const register = async (req, res, next) => {
   try {
     const { name, email, password, phone, language } = req.body;
+    const phoneClean = phone ? normalizePhone(phone) : null;
+    if (phone && !phoneClean) {
+      return res.status(400).json({ message: "Phone must start with +374 or 0, followed by 8 digits" });
+    }
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Name, email and password are required" });
@@ -45,7 +50,7 @@ export const register = async (req, res, next) => {
         name: name.trim(),
         email: normalizedEmail,
         passwordHash,
-        phone: phone || null,
+        phone: phoneClean,
         language: language || "en",
       },
       select: publicUserFields,

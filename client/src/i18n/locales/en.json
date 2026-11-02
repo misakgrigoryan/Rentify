@@ -141,7 +141,8 @@
     "saveNewPassword": "Save password",
     "missingToken": "This reset link is missing its token.",
     "passwordUpdated": "Password updated. You can now log in.",
-    "goToLogin": "Go to log in"
+    "goToLogin": "Go to log in",
+    "phoneInvalid": "Phone must start with +374 or 0, followed by 8 digits"
   },
   "product": {
     "listedBy": "Listed by",
