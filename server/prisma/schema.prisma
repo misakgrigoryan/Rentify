@@ -76,6 +76,7 @@ model Listing {
   location    String
   imageUrls   String[]
   status      ListingStatus @default(PENDING)
+  kind        String        @default("ITEM")
   titleHy       String?
   titleRu       String?
   descriptionHy String?

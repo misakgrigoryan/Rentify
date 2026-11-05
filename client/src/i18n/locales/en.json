@@ -40,7 +40,19 @@
     "Drones": "Drones",
     "Projectors": "Projectors",
     "Sports": "Sports",
-    "Costumes": "Costumes"
+    "Costumes": "Costumes",
+    "Plumber": "Plumber",
+    "Electrician": "Electrician",
+    "Carpenter": "Carpenter",
+    "Painter": "Painter",
+    "Cleaner": "Cleaner",
+    "Driver": "Driver",
+    "Mover": "Mover",
+    "Gardener": "Gardener",
+    "Photographer": "Photographer",
+    "Tutor": "Tutor",
+    "Mechanic": "Mechanic",
+    "Cook": "Cook"
   },
   "browse": {
     "title": "Browse items",
@@ -225,7 +237,14 @@
     "loginFirst": "Please log in first.",
     "saveError": "Could not save the listing",
     "translationsTitle": "Armenian and Russian (optional)",
-    "translationsHint": "Leave empty to show your text in every language."
+    "translationsHint": "Leave empty to show your text in every language.",
+    "kind": "What are you offering?",
+    "kindItem": "Item for rent",
+    "kindService": "Service (person)",
+    "otherCategory": "Other (type your own)",
+    "customCategory": "Your category",
+    "customHint": "For example: Piano tuning. Letters and numbers only.",
+    "customInvalid": "Category must be 2 to 40 letters or numbers"
   },
   "admin": {
     "title": "Admin",

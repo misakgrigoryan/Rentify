@@ -41,6 +41,12 @@ function parseListing(body, partial) {
     }
   }
 
+  const kind = body.kind === undefined ? "ITEM" : body.kind;
+  if (!["ITEM", "SERVICE"].includes(kind)) return { error: "Kind must be ITEM or SERVICE" };
+  if (body.kind !== undefined || !partial) data.kind = kind;
+  if (data.category !== undefined && !/^[\p{L}\p{N} -]{2,40}$/u.test(data.category)) {
+    return { error: "Category must be 2 to 40 letters or numbers" };
+  }
   if (body.imageUrls !== undefined) {
     data.imageUrls = Array.isArray(body.imageUrls) ? body.imageUrls.map(String) : [];
   }
@@ -55,6 +61,7 @@ export const getListings = async (req, res, next) => {
     const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || PAGE_SIZE));
 
     const where = { status: "APPROVED" };
+    if (req.query.kind) where.kind = String(req.query.kind);
     if (req.query.category) where.category = String(req.query.category);
     if (req.query.location) {
       where.location = { contains: String(req.query.location), mode: "insensitive" };

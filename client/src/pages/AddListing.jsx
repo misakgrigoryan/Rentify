@@ -5,17 +5,28 @@ import { motion } from "framer-motion";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
-import useAuth from "../hooks/useAuth.js";
 import ImageUpload from "../components/listing/ImageUpload.jsx";
+import useAuth from "../hooks/useAuth.js";
 import { CATEGORY_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
 
+const ITEM_CATEGORIES = Object.keys(CATEGORY_ICONS);
+const SERVICE_CATEGORIES = ["Plumber", "Electrician", "Carpenter", "Painter", "Cleaner", "Driver", "Mover", "Gardener", "Photographer", "Tutor", "Mechanic", "Cook"];
+const OTHER = "__OTHER__";
+const CATEGORY_RE = /^[\p{L}\p{N} -]{2,40}$/u;
+
 const emptyForm = {
-  title: "", description: "", price: "", currency: "AMD", unit: "DAY", category: "Tools", location: "", imageUrl: "",
+  kind: "ITEM", title: "", description: "", price: "", currency: "AMD", unit: "DAY",
+  category: "Tools", customCategory: "", location: "", imageUrl: "",
   titleHy: "", titleRu: "", descriptionHy: "", descriptionRu: "",
 };
+
 const selectClass = "rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
 const areaClass = "rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
+
+function listFor(kind) {
+  return kind === "SERVICE" ? SERVICE_CATEGORIES : ITEM_CATEGORIES;
+}
 
 export default function AddListing() {
   const { t } = useTranslation();
@@ -33,10 +44,15 @@ export default function AddListing() {
     api.get(`/listings/${id}`)
       .then((res) => {
         const l = res.data.listing;
+        const kind = l.kind || "ITEM";
+        const known = listFor(kind).includes(l.category);
         setForm({
+          kind,
           title: l.title, description: l.description, price: String(Number(l.price)),
-          currency: l.currency, unit: l.unit, category: l.category, location: l.location,
-          imageUrl: l.imageUrls?.[0] || "",
+          currency: l.currency, unit: l.unit,
+          category: known ? l.category : OTHER,
+          customCategory: known ? "" : l.category,
+          location: l.location, imageUrl: l.imageUrls?.[0] || "",
           titleHy: l.titleHy || "", titleRu: l.titleRu || "",
           descriptionHy: l.descriptionHy || "", descriptionRu: l.descriptionRu || "",
         });
@@ -47,13 +63,23 @@ export default function AddListing() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  function chooseKind(kind) {
+    setForm({ ...form, kind, category: listFor(kind)[0], customCategory: "" });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    const category = form.category === OTHER ? form.customCategory.trim() : form.category;
+    if (!CATEGORY_RE.test(category)) {
+      setError(t("listingForm.customInvalid"));
+      return;
+    }
     setSubmitting(true);
     const body = {
+      kind: form.kind,
       title: form.title, description: form.description, price: form.price,
-      currency: form.currency, unit: form.unit, category: form.category, location: form.location,
+      currency: form.currency, unit: form.unit, category, location: form.location,
       imageUrls: form.imageUrl ? [form.imageUrl] : [],
       titleHy: form.titleHy, titleRu: form.titleRu,
       descriptionHy: form.descriptionHy, descriptionRu: form.descriptionRu,
@@ -78,12 +104,32 @@ export default function AddListing() {
   }
   if (!ready) return <PageShell title={t("listingForm.editTitle")}><p className="text-muted">{t("listingForm.loadingListing")}</p></PageShell>;
 
+  const kindButton = (kind, label) => (
+    <button
+      type="button"
+      onClick={() => chooseKind(kind)}
+      className={`relative flex-1 rounded-2xl px-4 py-3 text-sm font-bold ring-1 transition-colors ${form.kind === kind ? "text-white ring-primary" : "bg-bg text-text ring-border hover:ring-primary"}`}
+    >
+      {form.kind === kind && <motion.span layoutId="kind-pill" className="absolute inset-0 rounded-2xl bg-primary" transition={{ type: "spring", stiffness: 350, damping: 30 }} />}
+      <span className="relative">{label}</span>
+    </button>
+  );
+
   return (
     <PageShell
       title={isEdit ? t("listingForm.editTitle") : t("listingForm.addTitle")}
       subtitle={isEdit ? t("listingForm.editSubtitle") : t("listingForm.addSubtitle")}
     >
       <motion.form initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid max-w-3xl gap-5 rounded-3xl bg-surface p-8 shadow-xl shadow-primary/10 ring-1 ring-border" onSubmit={handleSubmit}>
+
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-semibold">{t("listingForm.kind")}</span>
+          <div className="flex gap-3">
+            {kindButton("ITEM", t("listingForm.kindItem"))}
+            {kindButton("SERVICE", t("listingForm.kindService"))}
+          </div>
+        </div>
+
         <Input id="title" name="title" label={t("listingForm.title")} value={form.title} onChange={handleChange} required />
 
         <div className="flex flex-col gap-1.5">
@@ -109,10 +155,18 @@ export default function AddListing() {
           <div className="flex flex-col gap-1.5">
             <label htmlFor="category" className="text-sm font-semibold">{t("listingForm.category")}</label>
             <select id="category" name="category" value={form.category} onChange={handleChange} className={selectClass}>
-              {Object.keys(CATEGORY_ICONS).map((c) => <option key={c} value={c}>{t(`categories.${c}`)}</option>)}
+              {listFor(form.kind).map((c) => <option key={c} value={c}>{t(`categories.${c}`)}</option>)}
+              <option value={OTHER}>{t("listingForm.otherCategory")}</option>
             </select>
           </div>
         </div>
+
+        {form.category === OTHER && (
+          <div className="flex flex-col gap-1.5">
+            <Input id="customCategory" name="customCategory" label={t("listingForm.customCategory")} value={form.customCategory} onChange={handleChange} maxLength={40} required />
+            <p className="text-xs text-muted">{t("listingForm.customHint")}</p>
+          </div>
+        )}
 
         <Input id="location" name="location" label={t("listingForm.location")} value={form.location} onChange={handleChange} required />
         <ImageUpload value={form.imageUrl} onChange={(url) => setForm({ ...form, imageUrl: url })} />

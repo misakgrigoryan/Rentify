@@ -12,6 +12,8 @@ i18n.use(initReactI18next).init({
   lng: saved,
   fallbackLng: "en",
   interpolation: { escapeValue: false },
+  // A category typed by a user has no translation, so show it exactly as typed
+  parseMissingKeyHandler: (key) => (key.startsWith("categories.") ? key.slice("categories.".length) : key),
 });
 
 export default i18n;
