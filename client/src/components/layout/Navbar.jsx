@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { KeyRound, Moon, Sun } from "lucide-react";
 import Button from "../ui/Button.jsx";
+import NotificationBell from "./NotificationBell.jsx";
 import useAuth from "../../hooks/useAuth.js";
 import i18n from "../../i18n/index.js";
 import { getTheme, setTheme } from "../../lib/theme.js";
@@ -17,7 +18,6 @@ export default function Navbar() {
   const [dark, setDark] = useState(getTheme() === "dark");
   const [scrolled, setScrolled] = useState(false);
 
-  // Switch to the glassy style once the page is scrolled
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
@@ -108,6 +108,8 @@ export default function Navbar() {
               </button>
             ))}
           </div>
+
+          {user && <NotificationBell />}
 
           <motion.button
             whileHover={{ rotate: 20, scale: 1.1 }}
