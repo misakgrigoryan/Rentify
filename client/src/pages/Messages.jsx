@@ -201,15 +201,17 @@ export default function Messages() {
           ) : (
             <>
               <header className="flex items-center gap-3 border-b border-border bg-surface/80 px-5 py-3 backdrop-blur">
-                <Avatar user={{ id: active.partnerId, name: active.name, avatarUrl: active.avatarUrl }} size="h-10 w-10" text="text-sm" />
-                <div className="min-w-0">
-                  <p className="truncate font-bold">{active.name}</p>
-                  {active.listingTitle && (
-                    <p className="flex items-center gap-1 truncate text-xs font-semibold text-primary">
-                      <Package size={11} /> {t("messages.aboutListing")}: {active.listingTitle}
-                    </p>
-                  )}
-                </div>
+                <Link to={`/owners/${active.partnerId}`} title={t("messages.viewProfile")} className="group flex min-w-0 items-center gap-3 rounded-2xl p-1 pr-3 transition hover:bg-bg">
+                  <Avatar user={{ id: active.partnerId, name: active.name, avatarUrl: active.avatarUrl }} size="h-10 w-10" text="text-sm" />
+                  <div className="min-w-0">
+                    <p className="truncate font-bold group-hover:text-primary">{active.name}</p>
+                    {active.listingTitle && (
+                      <p className="flex items-center gap-1 truncate text-xs font-semibold text-primary">
+                        <Package size={11} /> {t("messages.aboutListing")}: {active.listingTitle}
+                      </p>
+                    )}
+                  </div>
+                </Link>
               </header>
 
               <div ref={listRef} className="flex flex-1 flex-col gap-2 overflow-y-auto px-5 py-4">

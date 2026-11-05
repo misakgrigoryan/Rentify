@@ -120,7 +120,8 @@
     "sendError": "Could not send the message",
     "loginPrompt": "to read and send messages.",
     "noMessages": "No messages yet. Say hello!",
-    "aboutListing": "About"
+    "aboutListing": "About",
+    "viewProfile": "View profile"
   },
   "auth": {
     "loginTitle": "Log in",
