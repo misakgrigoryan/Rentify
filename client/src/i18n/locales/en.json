@@ -301,5 +301,39 @@
     "uploading": "Uploading...",
     "remove": "Remove photo",
     "error": "Could not upload the photo"
+  },
+  "privacy": {
+    "link": "Privacy policy",
+    "title": "Privacy policy",
+    "updated": "Last updated: November 2026",
+    "intro": "Rentify connects people who rent items and services. This page explains what information we collect, why, and what choices you have.",
+    "collect": {
+      "title": "What we collect",
+      "text": "When you register: your name, email address, and password (stored only as a scrambled hash). Optionally: your phone number and profile photo. When you use the site: your listings, bookings, messages, reviews, and favorites."
+    },
+    "use": {
+      "title": "How we use it",
+      "text": "To create and secure your account, show your listings, process booking requests, send booking and password-reset emails, and show ratings. We do not sell your information."
+    },
+    "share": {
+      "title": "Who can see what",
+      "text": "Your name, profile photo, listings, and average rating are public. Your email and phone number are not shown to other users on the site. Owners and renters can see one another's name and profile photo when they talk about a booking."
+    },
+    "photos": {
+      "title": "Photos",
+      "text": "Photos you upload are stored with our image host, Cloudinary. Only upload photos you have the right to share, and avoid showing other people's faces or private documents."
+    },
+    "security": {
+      "title": "How we protect it",
+      "text": "Passwords are never stored in plain text. The connection to the site uses HTTPS. Our servers limit repeated login attempts. No system is perfectly secure, so please use a unique password."
+    },
+    "rights": {
+      "title": "Your choices",
+      "text": "You can change your name, phone number, language, and photo in your profile at any time. You can delete your account from the Profile page, which removes your listings, bookings, messages, reviews, and favorites."
+    },
+    "contact": {
+      "title": "Contact",
+      "text": "For questions about your data or to request help, contact the site owner through the Rentify project page on GitHub."
+    }
   }
 }

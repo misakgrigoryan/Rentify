@@ -4,6 +4,7 @@ import Home from "./pages/Home.jsx";
 import Products from "./pages/Products.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import OwnerProfile from "./pages/OwnerProfile.jsx";
+import Privacy from "./pages/Privacy.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
