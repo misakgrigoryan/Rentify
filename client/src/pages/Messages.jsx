@@ -15,11 +15,11 @@ export default function Messages() {
   const urlListingId = params.get("listing") ? Number(params.get("listing")) : null;
 
   const [conversations, setConversations] = useState([]);
-  const [active, setActive] = useState(null); // { partnerId, listingId, name, listingTitle }
+  const [active, setActive] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [error, setError] = useState("");
-  const endRef = useRef(null);
+  const listRef = useRef(null);
 
   function loadConversations() {
     api.get("/messages/conversations")
@@ -27,7 +27,6 @@ export default function Messages() {
       .catch(() => {});
   }
 
-  // Load the list, and open a chat if the URL names a person (from a listing's Message button)
   useEffect(() => {
     if (!user) return;
     loadConversations();
@@ -38,14 +37,18 @@ export default function Messages() {
     }
   }, [user, withId, urlListingId]);
 
-  // Show the thread and refresh it every 4 seconds
+  // Load the thread, refresh it every 4 seconds, and refresh the list so unread counts update
   useEffect(() => {
     if (!active) return;
     let cancelled = false;
     function load() {
       const q = active.listingId ? `?listingId=${active.listingId}` : "";
       api.get(`/messages/with/${active.partnerId}${q}`)
-        .then((r) => { if (!cancelled) setMessages(r.data.messages); })
+        .then((r) => {
+          if (cancelled) return;
+          setMessages(r.data.messages);
+          loadConversations();
+        })
         .catch(() => {});
     }
     load();
@@ -53,9 +56,11 @@ export default function Messages() {
     return () => { cancelled = true; clearInterval(timer); };
   }, [active]);
 
+  // Scroll only the chat box, and only when a new message arrives
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const el = listRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages.length, active]);
 
   function openConversation(c) {
     setError("");
@@ -65,6 +70,10 @@ export default function Messages() {
       name: c.partner.name,
       listingTitle: c.listing?.title || null,
     });
+    // Clear the badge right away, before the server answers
+    setConversations((list) =>
+      list.map((x) => (x.partner.id === c.partner.id && x.listingId === c.listingId ? { ...x, unread: 0 } : x))
+    );
   }
 
   async function send(e) {
@@ -102,7 +111,6 @@ export default function Messages() {
   return (
     <PageShell title={t("messages.title")} subtitle={t("messages.subtitle")}>
       <div className="grid h-[70vh] min-h-[420px] overflow-hidden rounded-3xl bg-surface shadow-xl shadow-primary/10 ring-1 ring-border md:grid-cols-[300px_1fr]">
-        {/* Conversation list */}
         <aside className="flex flex-col overflow-y-auto border-b border-border md:border-b-0 md:border-r">
           {conversations.length === 0 && !active ? (
             <p className="p-6 text-sm text-muted">{t("messages.noConversations")}</p>
@@ -129,7 +137,6 @@ export default function Messages() {
           )}
         </aside>
 
-        {/* Chat window */}
         <div className="flex min-h-0 flex-col">
           {!active ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-3 p-10 text-center text-muted">
@@ -143,7 +150,7 @@ export default function Messages() {
                 {active.listingTitle && <p className="text-sm text-primary">{t("messages.aboutListing")}: {active.listingTitle}</p>}
               </div>
 
-              <div className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
+              <div ref={listRef} className="flex flex-1 flex-col gap-3 overflow-y-auto p-4">
                 {messages.length === 0 && <p className="m-auto text-sm text-muted">{t("messages.noMessages")}</p>}
                 {messages.map((m) => {
                   const mine = m.senderId === user.id;
@@ -163,7 +170,6 @@ export default function Messages() {
                     </motion.div>
                   );
                 })}
-                <div ref={endRef} />
               </div>
 
               {error && <p className="mx-4 mb-2 rounded-2xl bg-danger/10 p-2 text-sm text-danger">{error}</p>}
