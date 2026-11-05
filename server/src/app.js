@@ -12,6 +12,7 @@ import favoriteRoutes from "./routes/favorite.routes.js";
 import ownerRoutes from "./routes/owner.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import messageRoutes from "./routes/message.routes.js";
+import notificationRoutes from "./routes/notification.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
@@ -42,6 +43,7 @@ app.use("/api/favorites", favoriteRoutes);
 app.use("/api/owners", ownerRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use((req, res) => {
