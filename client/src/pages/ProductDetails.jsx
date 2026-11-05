@@ -106,6 +106,7 @@ export default function ProductDetails() {
             <span className="text-base font-normal text-muted"> / {unit}</span>
           </p>
           <p className="mt-5 whitespace-pre-line leading-relaxed text-text/80">{description}</p>
+          {user && user.id !== listing.ownerId && (<Link to={`/messages?with=${listing.owner?.id}&listing=${listing.id}`} className="mt-4 inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-sm font-bold text-primary shadow-sm ring-1 ring-primary/40 hover:bg-primary hover:text-white">{t("messages.messageOwner")}</Link>)}
 
           <div className="mt-8">
             {isOwner ? (

@@ -111,9 +111,16 @@
   },
   "messages": {
     "title": "Messages",
-    "subtitle": "Chat with renters and owners (Phase 2).",
-    "noConversations": "No conversations yet.",
-    "selectConversation": "Select a conversation."
+    "subtitle": "Talk to renters and owners about items.",
+    "noConversations": "No conversations yet. Message an owner from any listing.",
+    "selectConversation": "Choose a conversation on the left.",
+    "messageOwner": "Message owner",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "sendError": "Could not send the message",
+    "loginPrompt": "to read and send messages.",
+    "noMessages": "No messages yet. Say hello!",
+    "aboutListing": "About"
   },
   "auth": {
     "loginTitle": "Log in",
