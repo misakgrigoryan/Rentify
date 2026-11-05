@@ -10,7 +10,7 @@ export const getOwnerProfile = async (req, res, next) => {
 
     const owner = await prisma.user.findUnique({
       where: { id: ownerId },
-      select: { id: true, name: true, createdAt: true },
+      select: { id: true, name: true, avatarUrl: true, createdAt: true },
     });
     if (!owner) {
       return res.status(404).json({ message: "User not found" });
