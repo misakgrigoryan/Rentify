@@ -60,6 +60,8 @@ model User {
   reviewsGiven Review[]   @relation("Reviewer")
   reviewsGot   Review[]   @relation("Reviewed")
   messagesSent Message[]
+  chatSent ChatMessage[] @relation("ChatSender")
+  chatReceived ChatMessage[] @relation("ChatReceiver")
   favorites    Favorite[]
 }
 
@@ -87,6 +89,7 @@ model Listing {
   bookings  Booking[]
   favorites Favorite[]
   reviews  Review[]
+  chatMessages ChatMessage[]
 
   @@index([category])
   @@index([location])
@@ -152,4 +155,21 @@ model Favorite {
   listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
   @@unique([userId, listingId])
+}
+
+model ChatMessage {
+  id         Int       @id @default(autoincrement())
+  body       String
+  createdAt  DateTime  @default(now())
+  readAt     DateTime?
+  listingId  Int?
+  senderId   Int
+  receiverId Int
+
+  sender   User     @relation("ChatSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User     @relation("ChatReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  listing  Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+
+  @@index([senderId, receiverId])
+  @@index([receiverId, readAt])
 }
