@@ -60,6 +60,7 @@ model User {
   reviewsGiven Review[]   @relation("Reviewer")
   reviewsGot   Review[]   @relation("Reviewed")
   messagesSent Message[]
+  reportsMade  Report[]
   chatSent ChatMessage[] @relation("ChatSender")
   chatReceived ChatMessage[] @relation("ChatReceiver")
   favorites    Favorite[]
@@ -91,6 +92,7 @@ model Listing {
   favorites Favorite[]
   reviews  Review[]
   chatMessages ChatMessage[]
+  reports      Report[]
 
   @@index([category])
   @@index([location])
@@ -173,4 +175,20 @@ model ChatMessage {
 
   @@index([senderId, receiverId])
   @@index([receiverId, readAt])
+}
+
+model Report {
+  id         Int      @id @default(autoincrement())
+  reason     String
+  details    String?
+  status     String   @default("OPEN")
+  createdAt  DateTime @default(now())
+  reporterId Int
+  listingId  Int?
+  targetUserId Int?
+
+  reporter User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  listing  Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([status])
 }
