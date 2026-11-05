@@ -379,5 +379,27 @@
       "title": "Changes to these terms",
       "text": "We may update these terms from time to time. The date at the top shows the latest version. Continuing to use the site after a change means you accept the updated terms."
     }
+  },
+  "report": {
+    "button": "Report this listing",
+    "title": "Report this listing",
+    "chooseReason": "Choose a reason",
+    "detailsPlaceholder": "Tell us what happened (optional)",
+    "send": "Send report",
+    "thanks": "Thank you. We will review it.",
+    "error": "Could not send the report",
+    "tab": "Reports",
+    "noneOpen": "No open reports.",
+    "deletedListing": "Deleted listing",
+    "by": "Reported by",
+    "resolve": "Resolve",
+    "dismiss": "Dismiss",
+    "reasons": {
+      "SCAM": "Scam or fraud",
+      "UNSAFE": "Unsafe",
+      "MISLEADING": "Misleading information",
+      "SPAM": "Spam",
+      "OTHER": "Other"
+    }
   }
 }

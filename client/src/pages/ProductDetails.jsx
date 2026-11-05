@@ -7,6 +7,7 @@ import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
 import Card from "../components/ui/Card.jsx";
 import FavoriteButton from "../components/listing/FavoriteButton.jsx";
+import ReportButton from "../components/listing/ReportButton.jsx";
 import ShareButton from "../components/listing/ShareButton.jsx";
 import PriceQuote from "../components/listing/PriceQuote.jsx";
 import ImageZoom from "../components/listing/ImageZoom.jsx";
@@ -107,6 +108,9 @@ export default function ProductDetails() {
           </p>
           <p className="mt-5 whitespace-pre-line leading-relaxed text-text/80">{description}</p>
           {user && user.id !== listing.ownerId && (<Link to={`/messages?with=${listing.owner?.id}&listing=${listing.id}`} className="mt-4 inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-sm font-bold text-primary shadow-sm ring-1 ring-primary/40 hover:bg-primary hover:text-white">{t("messages.messageOwner")}</Link>)}
+
+          {user && user.id !== listing.ownerId && <ReportButton listingId={listing.id} />}
+
 
           <div className="mt-8">
             {isOwner ? (

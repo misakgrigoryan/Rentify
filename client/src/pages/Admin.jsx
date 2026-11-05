@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import PageShell from "../components/ui/PageShell.jsx";
 import StatusBadge from "../components/ui/StatusBadge.jsx";
+import ReportsQueue from "../components/admin/ReportsQueue.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 
@@ -23,7 +24,7 @@ export default function Admin() {
   const isAdmin = isSuper || user?.role === "MODERATOR";
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!isAdmin || tab === "Reports") return;
     setStatus("loading");
     const request = tab === "Listings" ? api.get("/admin/listings") : api.get("/admin/users");
     request
@@ -74,8 +75,8 @@ export default function Admin() {
     );
   }
 
-  const tabs = isSuper ? ["Listings", "Users"] : ["Listings"];
-  const tabLabel = { Listings: t("admin.tabListings"), Users: t("admin.tabUsers") };
+  const tabs = ["Listings", "Reports", ...(isSuper ? ["Users"] : [])];
+  const tabLabel = { Listings: t("admin.tabListings"), Reports: t("report.tab"), Users: t("admin.tabUsers") };
 
   return (
     <PageShell title={t("admin.title")} subtitle={t(`roles.${user.role}`)}>
@@ -94,7 +95,9 @@ export default function Admin() {
       </AnimatePresence>
 
       <div className="mt-6 flex flex-col gap-4">
-        {status === "loading" ? (
+        {tab === "Reports" ? (
+          <ReportsQueue />
+        ) : status === "loading" ? (
           <p className="text-muted">{t("common.loading")}</p>
         ) : status === "error" ? (
           <p className="text-danger">{t("admin.loadError")}</p>
