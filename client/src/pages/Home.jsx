@@ -11,6 +11,7 @@ import PopularStrip from "../components/home/PopularStrip.jsx";
 import Testimonials from "../components/home/Testimonials.jsx";
 import { CATEGORY_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
+import ServiceTiles from "../components/home/ServiceTiles.jsx";
 
 const CATEGORY_COLORS = {
   Tools: "bg-primary/10 text-primary",
@@ -132,6 +133,8 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      <ServiceTiles />
 
       <section className="mx-auto max-w-6xl px-4 pb-16">
         <Eyebrow>{t("home.featured")}</Eyebrow>

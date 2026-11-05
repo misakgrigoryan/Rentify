@@ -33,7 +33,9 @@
     "howItWorks": "Как это работает",
     "step1": "Найдите вещь",
     "step2": "Отправьте запрос",
-    "step3": "Заберите и верните"
+    "step3": "Заберите и верните",
+    "servicesTitle": "Услуги рядом с вами",
+    "servicesAll": "Смотреть все услуги"
   },
   "categories": {
     "Tools": "Инструменты",
@@ -74,7 +76,12 @@
     "sortNewest": "Сначала новые",
     "sortPriceLow": "Цена: по возрастанию",
     "sortPriceHigh": "Цена: по убыванию",
-    "sortRating": "По рейтингу"
+    "sortRating": "По рейтингу",
+    "tabItems": "Вещи",
+    "tabServices": "Услуги",
+    "profession": "Специальность",
+    "allProfessions": "Все специальности",
+    "servicesCount": "Найдено услуг: {{count}}"
   },
   "listing": {
     "listedBy": "Автор:",

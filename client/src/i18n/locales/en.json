@@ -33,7 +33,9 @@
     "howItWorks": "How it works",
     "step1": "Find an item",
     "step2": "Send a request",
-    "step3": "Pick it up and return it"
+    "step3": "Pick it up and return it",
+    "servicesTitle": "Services near you",
+    "servicesAll": "See all services"
   },
   "categories": {
     "Tools": "Tools",
@@ -74,7 +76,12 @@
     "sortNewest": "Newest",
     "sortPriceLow": "Price: low to high",
     "sortPriceHigh": "Price: high to low",
-    "sortRating": "Best rated"
+    "sortRating": "Best rated",
+    "tabItems": "Items",
+    "tabServices": "Services",
+    "profession": "Profession",
+    "allProfessions": "All professions",
+    "servicesCount": "{{count}} services found"
   },
   "listing": {
     "listedBy": "Listed by",

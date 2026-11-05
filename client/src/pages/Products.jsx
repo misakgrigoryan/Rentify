@@ -1,22 +1,31 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, CalendarRange, X, MapPin, ArrowUpDown } from "lucide-react";
+import { Search, CalendarRange, X, MapPin, ArrowUpDown, Briefcase, Package } from "lucide-react";
 import ListingCard from "../components/listing/ListingCard.jsx";
 import ListingSkeleton from "../components/listing/ListingSkeleton.jsx";
 import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
-import { CATEGORY_ICONS } from "../lib/categories.js";
+import { CATEGORY_ICONS, SERVICE_ICONS } from "../lib/categories.js";
 import api from "../lib/api.js";
 
-const categories = ["All", ...Object.keys(CATEGORY_ICONS)];
+const ITEM_CATEGORIES = Object.keys(CATEGORY_ICONS);
+const SERVICE_CATEGORIES = Object.keys(SERVICE_ICONS);
 
 const selectClass = "w-full rounded-2xl border-2 border-border bg-surface px-4 py-2.5 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/15";
 
 export default function Products() {
   const { t } = useTranslation();
+  const [params] = useSearchParams();
+
+  // Links from Home can open Browse already on Services, or on a given profession
+  const startKind = params.get("kind") === "SERVICE" ? "SERVICE" : "ITEM";
+  const startCategory = params.get("category") || "All";
+
+  const [kind, setKind] = useState(startKind);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState(startCategory);
   const [city, setCity] = useState("All");
   const [sort, setSort] = useState("newest");
   const [dates, setDates] = useState({ start: "", end: "" });
@@ -25,6 +34,13 @@ export default function Products() {
   const [error, setError] = useState("");
 
   const hasDates = Boolean(dates.start && dates.end);
+  const pills = kind === "SERVICE" ? SERVICE_CATEGORIES : ITEM_CATEGORIES;
+  const icons = kind === "SERVICE" ? SERVICE_ICONS : CATEGORY_ICONS;
+
+  function switchKind(next) {
+    setKind(next);
+    setCategory("All");
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -37,10 +53,10 @@ export default function Products() {
         },
       });
     } else {
-      const params = {};
-      if (search) params.search = search;
-      if (category !== "All") params.category = category;
-      request = api.get("/listings", { params });
+      const q = { kind };
+      if (search) q.search = search;
+      if (category !== "All") q.category = category;
+      request = api.get("/listings", { params: q });
     }
     request
       .then((res) => {
@@ -49,32 +65,35 @@ export default function Products() {
       })
       .catch((err) => setError(err.response?.data?.message || t("browse.loadError")))
       .finally(() => setLoading(false));
-  }, [search, category, dates.start, dates.end, t]);
+  }, [search, category, kind, dates.start, dates.end, t]);
 
   const cities = useMemo(
     () => [...new Set(listings.map((l) => l.location))].sort(),
     [listings]
   );
 
+  // Keep only the chosen kind (items or services), then apply the other filters
   const visible = useMemo(() => {
     const list = listings.filter((l) => {
+      const byKind = (l.kind || "ITEM") === kind;
       const byCity = city === "All" || l.location === city;
-      const byCategory = hasDates ? category === "All" || l.category === category : true;
+      const byCategory = category === "All" || l.category === category;
       const byTitle = !hasDates || l.title.toLowerCase().includes(search.toLowerCase());
-      return byCity && byCategory && byTitle;
+      return byKind && byCity && byCategory && byTitle;
     });
-
     const sorted = [...list];
     if (sort === "priceLow") sorted.sort((a, b) => Number(a.price) - Number(b.price));
     if (sort === "priceHigh") sorted.sort((a, b) => Number(b.price) - Number(a.price));
     if (sort === "rating") sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
     if (sort === "newest") sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     return sorted;
-  }, [listings, city, sort, category, search, hasDates]);
+  }, [listings, kind, city, category, search, sort, hasDates]);
 
-  const countText = hasDates
-    ? t("browse.itemsFoundFree", { count: visible.length })
-    : t("browse.itemsFound", { count: visible.length });
+  const countText = kind === "SERVICE"
+    ? t("browse.servicesCount", { count: visible.length })
+    : hasDates
+      ? t("browse.itemsFoundFree", { count: visible.length })
+      : t("browse.itemsFound", { count: visible.length });
 
   const sortOptions = [
     { value: "newest", label: t("browse.sortNewest") },
@@ -89,9 +108,29 @@ export default function Products() {
         {t("browse.title")}
       </motion.h1>
 
+      {/* Items / Services switch */}
+      <div className="mt-6 inline-flex gap-1 rounded-2xl bg-surface p-1.5 shadow-sm ring-1 ring-border">
+        {[
+          { value: "ITEM", label: t("browse.tabItems"), Icon: Package },
+          { value: "SERVICE", label: t("browse.tabServices"), Icon: Briefcase },
+        ].map(({ value, label, Icon }) => (
+          <button
+            key={value}
+            onClick={() => switchKind(value)}
+            className={`relative flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition-colors ${kind === value ? "text-white" : "text-muted hover:text-text"}`}
+          >
+            {kind === value && (
+              <motion.span layoutId="kind-switch" className="absolute inset-0 rounded-xl bg-primary" transition={{ type: "spring", stiffness: 350, damping: 30 }} />
+            )}
+            <span className="relative flex items-center gap-2"><Icon size={16} /> {label}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Category or profession pills */}
       <div className="mt-6 flex flex-wrap gap-2">
-        {categories.map((c) => {
-          const Icon = CATEGORY_ICONS[c];
+        {["All", ...pills].map((c) => {
+          const Icon = icons[c];
           const active = category === c;
           return (
             <motion.button
@@ -108,7 +147,7 @@ export default function Products() {
               )}
               <span className="relative flex items-center gap-2">
                 {Icon && <Icon size={16} />}
-                {c === "All" ? t("browse.all") : t(`categories.${c}`)}
+                {c === "All" ? (kind === "SERVICE" ? t("browse.allProfessions") : t("browse.all")) : t(`categories.${c}`)}
               </span>
             </motion.button>
           );
@@ -139,20 +178,22 @@ export default function Products() {
             </select>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-border pt-4">
-            <span className="flex items-center gap-2 text-sm font-bold"><CalendarRange size={16} /> {t("browse.availableDates")}</span>
-            <Input id="from" label={t("browse.from")} type="datetime-local" value={dates.start} onChange={(e) => setDates({ ...dates, start: e.target.value })} />
-            <Input id="to" label={t("browse.to")} type="datetime-local" value={dates.end} onChange={(e) => setDates({ ...dates, end: e.target.value })} />
-            <AnimatePresence>
-              {(dates.start || dates.end) && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
-                  <Button size="sm" variant="ghost" className="w-full" onClick={() => setDates({ start: "", end: "" })}>
-                    <X size={14} /> {t("browse.clearDates")}
-                  </Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+          {kind === "ITEM" && (
+            <div className="flex flex-col gap-3 border-t border-border pt-4">
+              <span className="flex items-center gap-2 text-sm font-bold"><CalendarRange size={16} /> {t("browse.availableDates")}</span>
+              <Input id="from" label={t("browse.from")} type="datetime-local" value={dates.start} onChange={(e) => setDates({ ...dates, start: e.target.value })} />
+              <Input id="to" label={t("browse.to")} type="datetime-local" value={dates.end} onChange={(e) => setDates({ ...dates, end: e.target.value })} />
+              <AnimatePresence>
+                {(dates.start || dates.end) && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
+                    <Button size="sm" variant="ghost" className="w-full" onClick={() => setDates({ start: "", end: "" })}>
+                      <X size={14} /> {t("browse.clearDates")}
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
         </aside>
 
         <div>
@@ -161,9 +202,7 @@ export default function Products() {
 
           {loading ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <ListingSkeleton key={i} />
-              ))}
+              {Array.from({ length: 6 }).map((_, i) => <ListingSkeleton key={i} />)}
             </div>
           ) : visible.length === 0 ? (
             <motion.p initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-3xl bg-surface p-10 text-center text-muted shadow-sm ring-1 ring-border">
