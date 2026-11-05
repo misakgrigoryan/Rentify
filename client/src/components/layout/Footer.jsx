@@ -24,6 +24,7 @@ export default function Footer() {
             <Link to="/favorites" className="text-white/90 hover:text-white">{t("nav.favorites")}</Link>
             <Link to="/listings/new" className="text-white/90 hover:text-white">{t("home.listItem")}</Link>
             <Link to="/privacy" className="text-white/90 hover:text-white">{t("privacy.link")}</Link>
+            <Link to="/terms" className="text-white/90 hover:text-white">{t("terms.link")}</Link>
           </nav>
         </div>
         <p className="mt-10 border-t border-white/20 pt-6 text-sm text-white/70">{t("footer.rights")}</p>

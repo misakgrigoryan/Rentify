@@ -341,5 +341,43 @@
     "none": "All caught up",
     "messages": "Unread messages",
     "requests": "Booking requests waiting"
+  },
+  "terms": {
+    "link": "Terms of service",
+    "title": "Terms of service",
+    "updated": "Last updated: November 2026",
+    "intro": "These terms apply to everyone who uses Rentify, whether you rent items, offer items, or offer services. By creating an account, you agree to them.",
+    "use": {
+      "title": "Using Rentify",
+      "text": "You must be at least 18 years old, or have a parent or guardian's permission, to create an account. Keep your login details private and tell us if you think someone else has access to your account."
+    },
+    "listings": {
+      "title": "Listings",
+      "text": "Describe your item or service honestly, with accurate prices and photos you have the right to use. Listings that are misleading, illegal, or unsafe can be rejected or removed by the site team."
+    },
+    "bookings": {
+      "title": "Bookings",
+      "text": "A booking is a request until the owner or service provider accepts it. Once accepted, both sides agree to the dates, price, and pickup or meeting arrangements shown in the booking. Return items on time and in the same condition."
+    },
+    "services": {
+      "title": "Services and service providers",
+      "text": "Service providers are responsible for their own work, licenses, insurance, and safety. Rentify is a meeting place only and does not employ, supervise, or guarantee any provider. Check references and reviews before you book."
+    },
+    "payments": {
+      "title": "Payments",
+      "text": "Rentify does not process payments. Agree on payment directly with the other person, such as cash or bank transfer, and keep a record of what you agreed."
+    },
+    "conduct": {
+      "title": "Behaviour",
+      "text": "Be respectful in messages and reviews. Harassment, fake reviews, spam, and attempts to scam other users are not allowed, and may lead to a ban or deletion of your account."
+    },
+    "liability": {
+      "title": "Limits of responsibility",
+      "text": "Rentify is provided as it is. We are not responsible for damage, loss, injury, or disputes between users. Use your own judgement and, where needed, seek professional advice."
+    },
+    "changes": {
+      "title": "Changes to these terms",
+      "text": "We may update these terms from time to time. The date at the top shows the latest version. Continuing to use the site after a change means you accept the updated terms."
+    }
   }
 }
