@@ -20,6 +20,9 @@ const publicUserFields = {
 export const register = async (req, res, next) => {
   try {
     const { name, email, password, phone, language } = req.body;
+    if (req.body.acceptedTerms !== true || req.body.isAdult !== true) {
+      return res.status(400).json({ message: "You must accept the terms and confirm you are 18 or older" });
+    }
     const phoneClean = phone ? normalizePhone(phone) : null;
     if (phone && !phoneClean) {
       return res.status(400).json({ message: "Phone must start with +374 or 0, followed by 8 digits" });

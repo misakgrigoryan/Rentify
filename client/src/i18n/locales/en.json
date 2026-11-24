@@ -170,7 +170,12 @@
     "missingToken": "This reset link is missing its token.",
     "passwordUpdated": "Password updated. You can now log in.",
     "goToLogin": "Go to log in",
-    "phoneInvalid": "Phone must start with +374 or 0, followed by 8 digits"
+    "phoneInvalid": "Phone must start with +374 or 0, followed by 8 digits",
+    "consentLegend": "Consent",
+    "agreeTerms": "I agree to the Terms of service.",
+    "agreePrivacy": "I have read the Privacy policy.",
+    "confirmAdult": "I confirm I am 18 years old or older.",
+    "consentRequired": "Please tick all three boxes to create an account."
   },
   "product": {
     "listedBy": "Listed by",

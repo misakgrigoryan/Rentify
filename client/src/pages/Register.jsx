@@ -16,10 +16,12 @@ export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
+  const [consent, setConsent] = useState({ terms: false, privacy: false, adult: false });
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const allChecked = consent.terms && consent.privacy && consent.adult;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -28,9 +30,13 @@ export default function Register() {
       setError(t("auth.phoneInvalid"));
       return;
     }
+    if (!allChecked) {
+      setError(t("auth.consentRequired"));
+      return;
+    }
     setSubmitting(true);
     try {
-      await register(form);
+      await register({ ...form, acceptedTerms: true, isAdult: true });
       navigate("/");
     } catch (err) {
       if (err.response?.status === 409) setError(t("auth.emailExists"));
@@ -39,6 +45,8 @@ export default function Register() {
       setSubmitting(false);
     }
   }
+
+  const checkClass = "mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-primary)]";
 
   return (
     <AuthBackdrop>
@@ -50,7 +58,7 @@ export default function Register() {
           className="rounded-3xl bg-surface p-8 shadow-xl shadow-primary/10 ring-1 ring-border"
         >
           <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/25 text-warning">
-            <UserPlus size={26} />
+            <UserPlus size={26} aria-hidden="true" />
           </span>
           <h1 className="mt-4 text-center text-2xl font-extrabold">{t("auth.registerTitle")}</h1>
           <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -58,7 +66,24 @@ export default function Register() {
             <Input id="email" name="email" label={t("auth.email")} type="email" value={form.email} onChange={handleChange} required />
             <Input id="phone" name="phone" label={t("auth.phone")} type="tel" placeholder="+374 77 123 456" value={form.phone} onChange={handleChange} />
             <Input id="password" name="password" label={t("auth.passwordHint")} type="password" value={form.password} onChange={handleChange} required />
-            {error && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</motion.p>}
+
+            <fieldset className="grid gap-3 rounded-2xl bg-bg p-4">
+              <legend className="sr-only">{t("auth.consentLegend")}</legend>
+              <label className="flex items-start gap-3 text-sm leading-relaxed">
+                <input type="checkbox" className={checkClass} checked={consent.terms} onChange={(e) => setConsent({ ...consent, terms: e.target.checked })} />
+                <span>{t("auth.agreeTerms")} <Link to="/terms" className="font-semibold text-primary underline">{t("terms.link")}</Link></span>
+              </label>
+              <label className="flex items-start gap-3 text-sm leading-relaxed">
+                <input type="checkbox" className={checkClass} checked={consent.privacy} onChange={(e) => setConsent({ ...consent, privacy: e.target.checked })} />
+                <span>{t("auth.agreePrivacy")} <Link to="/privacy" className="font-semibold text-primary underline">{t("privacy.link")}</Link></span>
+              </label>
+              <label className="flex items-start gap-3 text-sm leading-relaxed">
+                <input type="checkbox" className={checkClass} checked={consent.adult} onChange={(e) => setConsent({ ...consent, adult: e.target.checked })} />
+                <span>{t("auth.confirmAdult")}</span>
+              </label>
+            </fieldset>
+
+            {error && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} role="alert" className="rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</motion.p>}
             <Button type="submit" className="w-full" loading={submitting}>{t("auth.registerButton")}</Button>
           </form>
           <p className="mt-5 text-center text-sm text-muted">
