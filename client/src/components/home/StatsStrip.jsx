@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { extra } from "../../lib/extraText.js";
+import { SERVICE_ICONS } from "../../lib/categories.js";
 import api from "../../lib/api.js";
 
 // Counts from 0 up to the target number, once, when it appears
@@ -39,7 +40,7 @@ export default function StatsStrip({ listings }) {
   const stats = [
     { value: total, label: extra("items", lang) },
     { value: cities, label: extra("cities", lang) },
-    { value: 100, label: extra("secure", lang), suffix: "%" },
+    { value: Object.keys(SERVICE_ICONS).length, label: extra("professions", lang) },
   ];
 
   return (

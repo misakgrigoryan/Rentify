@@ -401,5 +401,44 @@
       "SPAM": "Spam",
       "OTHER": "Other"
     }
+  },
+  "refund": {
+    "link": "Refund policy",
+    "title": "Refund policy",
+    "updated": "Last updated: November 2026",
+    "intro": "Rentify does not take payments. Any money for a rental or service is agreed and paid directly between the renter and the owner or provider.",
+    "payments": {
+      "title": "Payments",
+      "text": "No payment is processed by Rentify, so no refunds are issued by Rentify. There are no fees added by the site."
+    },
+    "bookings": {
+      "title": "Cancelled bookings",
+      "text": "A booking can be cancelled by the renter while it is pending or accepted, using the Cancel button. Agree any refund of money with the other person directly."
+    },
+    "disputes": {
+      "title": "Disputes",
+      "text": "If you have a problem with a rental or service, first try to agree a solution with the other person. Use the report button to tell us about unsafe or fraudulent listings."
+    }
+  },
+  "cookies": {
+    "link": "Cookie policy",
+    "title": "Cookie policy",
+    "updated": "Last updated: November 2026",
+    "intro": "Cookies and similar storage are small pieces of data kept in your browser. Rentify uses only what it needs to work.",
+    "essential": {
+      "title": "What we store",
+      "text": "Your login token, your chosen language, and your light or dark theme choice. These are needed for the site to work and are stored in your browser."
+    },
+    "none": {
+      "title": "What we do not use",
+      "text": "Rentify does not use advertising cookies, tracking cookies, or analytics tools. We do not share browser data with advertisers."
+    },
+    "control": {
+      "title": "Your control",
+      "text": "You can clear this data at any time in your browser settings. Logging out removes your login token."
+    }
+  },
+  "stats": {
+    "professions": "Professions"
   }
 }

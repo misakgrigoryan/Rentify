@@ -6,6 +6,8 @@ import ProductDetails from "./pages/ProductDetails.jsx";
 import OwnerProfile from "./pages/OwnerProfile.jsx";
 import Privacy from "./pages/Privacy.jsx";
 import Terms from "./pages/Terms.jsx";
+import Refund from "./pages/Refund.jsx";
+import Cookies from "./pages/Cookies.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -41,6 +43,8 @@ export default function App() {
         <Route path="/messages" element={<Messages />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/refund" element={<Refund />} />
+        <Route path="/cookies" element={<Cookies />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
