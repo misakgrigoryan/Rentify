@@ -192,3 +192,13 @@ model Report {
 
   @@index([status])
 }
+
+model DataRequest {
+  id        Int      @id @default(autoincrement())
+  email     String
+  name      String?
+  request   String
+  message   String?
+  status    String   @default("OPEN")
+  createdAt DateTime @default(now())
+}

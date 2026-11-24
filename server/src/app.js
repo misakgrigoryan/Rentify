@@ -14,6 +14,8 @@ import uploadRoutes from "./routes/upload.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import reportRoutes from "./routes/report.routes.js";
+import dataRequestRoutes from "./routes/dataRequest.routes.js";
+import dataRequestRoutes from "./routes/dataRequest.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
@@ -46,6 +48,8 @@ app.use("/api/uploads", uploadRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/data-requests", dataRequestRoutes);
+app.use("/api/data-requests", dataRequestRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use((req, res) => {
