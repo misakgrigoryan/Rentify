@@ -445,6 +445,7 @@
     "title": "Cookie notice",
     "text": "We use only the cookies Rentify needs to work: your login, language, and theme. We do not use advertising or tracking cookies.",
     "more": "Cookie policy",
-    "accept": "Accept necessary cookies"
+    "accept": "Accept necessary cookies",
+    "close": "Close"
   }
 }

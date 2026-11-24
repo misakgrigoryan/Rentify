@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
-import { Cookie } from "lucide-react";
+import { Cookie, X } from "lucide-react";
 
 const KEY = "rentify_cookie_consent";
 
-// Shown once. Only necessary cookies are used, so the only choice is to accept them.
+// Shown until the user accepts. The X hides it for this visit only, and nothing is saved.
 export default function CookieBanner() {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
@@ -20,6 +20,10 @@ export default function CookieBanner() {
     setVisible(false);
   }
 
+  function close() {
+    setVisible(false);
+  }
+
   return (
     <AnimatePresence>
       {visible && (
@@ -30,8 +34,16 @@ export default function CookieBanner() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ type: "spring", stiffness: 200, damping: 22 }}
-          className="fixed inset-x-3 bottom-3 z-50 mx-auto flex max-w-3xl flex-col gap-4 rounded-3xl bg-surface p-5 shadow-2xl ring-1 ring-border sm:flex-row sm:items-center"
+          className="fixed inset-x-3 bottom-3 z-50 mx-auto flex max-w-3xl flex-col gap-4 rounded-3xl bg-surface p-5 pr-12 shadow-2xl ring-1 ring-border sm:flex-row sm:items-center"
         >
+          <button
+            type="button"
+            onClick={close}
+            aria-label={t("cookieBanner.close")}
+            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-muted hover:bg-bg hover:text-text focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
+          >
+            <X size={16} aria-hidden="true" />
+          </button>
           <div className="flex items-start gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <Cookie size={20} aria-hidden="true" />
