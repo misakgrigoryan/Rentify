@@ -8,6 +8,7 @@ import Privacy from "./pages/Privacy.jsx";
 import Terms from "./pages/Terms.jsx";
 import Refund from "./pages/Refund.jsx";
 import Cookies from "./pages/Cookies.jsx";
+import DataRequest from "./pages/DataRequest.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/refund" element={<Refund />} />
         <Route path="/cookies" element={<Cookies />} />
+        <Route path="/data-request" element={<DataRequest />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
