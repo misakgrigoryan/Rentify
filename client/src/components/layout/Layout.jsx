@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./Navbar.jsx";
 import Footer from "./Footer.jsx";
+import CookieBanner from "./CookieBanner.jsx";
 
 // Wraps every page. Each page fades and slides in when the route changes.
 export default function Layout() {
@@ -23,6 +24,7 @@ export default function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
+      <CookieBanner />
     </div>
   );
 }

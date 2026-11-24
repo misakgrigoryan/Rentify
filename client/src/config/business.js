@@ -1,7 +1,7 @@
-// Fill these in once. They appear in the footer and legal pages.
+// Shown in the footer
 export const BUSINESS = {
-  name: "[Your full legal name]",
+  name: "Միսակ Գրիգորյան",
   status: "Individual project (not registered as a company)",
-  city: "[City], Armenia",
-  email: "[your contact email]",
+  city: "Armenia",
+  email: "misak.grigoryan14@gmail.com",
 };
