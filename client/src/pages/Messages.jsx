@@ -187,7 +187,7 @@ export default function Messages() {
         </aside>
 
         {/* Chat window */}
-        <div className="flex min-h-0 flex-col bg-gradient-to-b from-surface to-bg/40">
+        <div className="flex min-h-0 flex-col bg-gradient-to-b from-surface to-bg">
           {!active ? (
             <div className="flex flex-1 items-center justify-center p-6"><EmptyState icon={MessageCircle} title={t("messages.selectConversation")} /></div>
           ) : (

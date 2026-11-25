@@ -22,7 +22,7 @@ function WheelRow({ index, y, label, selected, textClass }) {
     >
       <span
         className={`h-12 w-full px-2 text-center leading-[3rem] tabular-nums transition-colors duration-300 ${textClass} ${
-          selected ? "font-black text-primary" : "font-semibold text-muted"
+          selected ? "font-black text-teal" : "font-semibold text-muted"
         }`}
       >
         {label}
@@ -165,7 +165,7 @@ export default function AgeWheel({
         <div
           aria-hidden="true"
           style={{ top: CENTER, height: ITEM }}
-          className="pointer-events-none absolute inset-x-3 rounded-2xl bg-primary/10 ring-1 ring-primary/30"
+          className="pointer-events-none absolute inset-x-3 rounded-2xl bg-teal-soft ring-1 ring-teal"
         />
         {rows.map((i) => (
           <WheelRow
