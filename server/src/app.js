@@ -15,9 +15,17 @@ import messageRoutes from "./routes/message.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import reportRoutes from "./routes/report.routes.js";
 import dataRequestRoutes from "./routes/dataRequest.routes.js";
+import securityRoutes from "./routes/security.routes.js";
+import { logError, logFailedLogin } from "./utils/securityLog.js";
 import adminRoutes from "./routes/admin.routes.js";
 
 const app = express();
+
+// Count failed sign-ins (401 on login). No IP address or email is recorded.
+app.use("/api/auth/login", (req, res, next) => {
+  res.on("finish", () => { if (res.statusCode === 401) logFailedLogin(); });
+  next();
+});
 
 // Render sits behind a proxy, so trust it to report the visitor's real IP
 app.set("trust proxy", 1);
@@ -48,6 +56,7 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/data-requests", dataRequestRoutes);
+app.use("/api/security", securityRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.use((req, res) => {
@@ -55,6 +64,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  logError(req.originalUrl, err);
   console.error(err);
   res.status(500).json({ message: "Something went wrong" });
 });
