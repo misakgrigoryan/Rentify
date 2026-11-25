@@ -2,6 +2,17 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { KeyRound } from "lucide-react";
 import { BUSINESS } from "../../config/business.js";
+import { SOCIAL } from "../../config/social.js";
+
+function InstagramIcon() {
+  return (
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" />
+    </svg>
+  );
+}
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -14,11 +25,11 @@ export default function Footer() {
   ];
   return (
     <footer className="relative mt-16 overflow-hidden bg-gradient-to-br from-primary via-primary to-[#8f3b25] text-white">
-      <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
       <div className="relative mx-auto max-w-6xl px-4 py-12">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-surface/15">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
               <KeyRound size={22} aria-hidden="true" />
             </span>
             <div>
@@ -39,7 +50,16 @@ export default function Footer() {
           ))}
         </nav>
         <div className="mt-8 border-t border-white/25 pt-6 text-sm text-white/85">
-          <p>{t("footer.rights")}</p>
+          <a
+            href={SOCIAL.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Rentify on Instagram"
+            className="inline-flex cursor-pointer items-center gap-2 rounded-full bg-white/15 px-4 py-2 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/25 hover:shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-white/40"
+          >
+            <InstagramIcon /> @gr1g_or1annnn
+          </a>
+          <p className="mt-4">{t("footer.rights")}</p>
           <p className="mt-1">{BUSINESS.name} · {BUSINESS.status} · {BUSINESS.city} · {BUSINESS.email}</p>
         </div>
       </div>
