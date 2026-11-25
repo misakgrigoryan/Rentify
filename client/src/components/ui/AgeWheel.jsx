@@ -53,7 +53,7 @@ export default function AgeWheel({
     if (drag.current) return;
     const target = -selectedIndex * ITEM;
     if (Math.abs(y.get() - target) > 0.5) {
-      animate(y, target, { type: "spring", stiffness: 260, damping: 28 });
+      animate(y, target, { type: "spring", stiffness: 420, damping: 30 });
     }
   }, [selectedIndex, y]);
 
@@ -62,7 +62,7 @@ export default function AgeWheel({
 
   function snapTo(index, velocity = 0) {
     const target = Math.min(count - 1, Math.max(0, index));
-    animate(y, -target * ITEM, { type: "spring", stiffness: 260, damping: 28, velocity });
+    animate(y, -target * ITEM, { type: "spring", stiffness: 420, damping: 30, velocity });
     if (list[target].value !== value) onChange(list[target].value);
   }
 
@@ -121,7 +121,7 @@ export default function AgeWheel({
     const dt = Math.max(1, last.t - first.t);
     const recent = performance.now() - last.t < 90;
     const velocityPxMs = recent ? (last.y - first.y) / dt : 0;
-    const projected = y.get() + velocityPxMs * 220;
+    const projected = y.get() + velocityPxMs * 420;
     snapTo(indexFromY(projected), velocityPxMs * 1000);
   }
 

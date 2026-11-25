@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Trash2, MapPin, Calendar } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import StatusBadge from "../components/ui/StatusBadge.jsx";
+import EmptyState from "../components/ui/EmptyState.jsx";
+import { Package, Inbox } from "lucide-react";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 import { localized } from "../lib/i18nContent.js";
@@ -123,10 +125,7 @@ export default function Dashboard() {
           <p className="text-danger">{t("dashboard.loadError")}</p>
         ) : tab === "mine" ? (
           items.length === 0 ? (
-            <div className="flex flex-col items-start gap-4 rounded-3xl bg-surface p-8 shadow-sm ring-1 ring-border">
-              <p className="text-muted">{t("dashboard.noListings")}</p>
-              <Link to="/listings/new"><Button>{t("listing.addListing")}</Button></Link>
-            </div>
+            <EmptyState icon={Package} title={t("dashboard.noListings")}><Link to="/listings/new"><Button>{t("listing.addListing")}</Button></Link></EmptyState>
           ) : (
             <div className="flex flex-col gap-4">
               {items.map((listing, i) => (
@@ -146,7 +145,7 @@ export default function Dashboard() {
             </div>
           )
         ) : visible.length === 0 ? (
-          <p className="rounded-3xl bg-surface p-8 text-center text-muted shadow-sm ring-1 ring-border">{t("dashboard.nothing")}</p>
+          <EmptyState icon={Inbox} compact>{t("dashboard.nothing")}</EmptyState>
         ) : (
           <div className="flex flex-col gap-4">
             {visible.map((b, i) => (

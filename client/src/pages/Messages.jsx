@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Send, Package } from "lucide-react";
 import PageShell from "../components/ui/PageShell.jsx";
+import EmptyState from "../components/ui/EmptyState.jsx";
 import useAuth from "../hooks/useAuth.js";
 import api from "../lib/api.js";
 
@@ -147,7 +148,7 @@ export default function Messages() {
         <aside className="flex min-h-0 flex-col border-b border-border bg-bg/60 md:border-b-0 md:border-r">
           <div className="flex-1 overflow-y-auto p-2">
             {conversations.length === 0 ? (
-              <p className="p-6 text-center text-sm text-muted">{t("messages.noConversations")}</p>
+              <div className="p-3"><EmptyState icon={MessageCircle} title={t("messages.noConversations")} compact /></div>
             ) : (
               conversations.map((c, i) => {
                 const isActive = active && active.partnerId === c.partner.id && active.listingId === c.listingId;
@@ -188,16 +189,7 @@ export default function Messages() {
         {/* Chat window */}
         <div className="flex min-h-0 flex-col bg-gradient-to-b from-surface to-bg/40">
           {!active ? (
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 p-10 text-center">
-              <motion.span
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary"
-              >
-                <MessageCircle size={30} />
-              </motion.span>
-              <p className="text-muted">{t("messages.selectConversation")}</p>
-            </div>
+            <div className="flex flex-1 items-center justify-center p-6"><EmptyState icon={MessageCircle} title={t("messages.selectConversation")} /></div>
           ) : (
             <>
               <header className="flex items-center gap-3 border-b border-border bg-surface/80 px-5 py-3 backdrop-blur">
