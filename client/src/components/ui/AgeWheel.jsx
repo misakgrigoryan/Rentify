@@ -1,12 +1,11 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 
 const ITEM = 48;                 // height of one row in px
 const VISIBLE = 5;               // rows visible at once
-const CENTER = Math.floor(VISIBLE / 2) * ITEM; // top of the centre row
+const CENTER = Math.floor(VISIBLE / 2) * ITEM;
 
-// One row. Its position, tilt, fade, scale and blur all depend on its distance from the centre,
-// which is what makes the list look like a real wheel.
+// One row. Its position, tilt, fade, scale and blur depend on its distance from the centre.
 function WheelRow({ index, y, label, selected }) {
   const d = useTransform(y, (v) => index + v / ITEM);
   const translateY = useTransform(y, (v) => index * ITEM + v + CENTER);
@@ -21,7 +20,6 @@ function WheelRow({ index, y, label, selected }) {
       style={{ y: translateY, rotateX, opacity, scale, filter: blur }}
       className="absolute inset-x-0 top-0 flex items-center justify-center"
     >
-      {/* Same size and spacing for every number. Only colour and weight change for the selected one. */}
       <span
         className={`h-12 w-full text-center text-2xl leading-[3rem] tabular-nums transition-colors duration-300 ${
           selected ? "font-black text-primary" : "font-semibold text-muted"
@@ -51,6 +49,29 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
     if (min + target !== value) onChange(min + target);
   }
 
+  // Keep the latest version of the handler so the native listener never uses old values
+  const wheelHandler = useRef(null);
+  wheelHandler.current = (e) => {
+    if (Math.abs(e.deltaY) < 4) return;
+    if (wheelLock.current) return;
+    wheelLock.current = true;
+    setTimeout(() => { wheelLock.current = false; }, 120);
+    snapTo(currentIndex() + Math.sign(e.deltaY));
+  };
+
+  // Native listener with passive: false, so the page scroll can be blocked while over the wheel
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      wheelHandler.current(e);
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, []);
+
   function onPointerDown(e) {
     e.currentTarget.setPointerCapture(e.pointerId);
     y.stop();
@@ -67,7 +88,6 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
     if (!d) return;
     if (Math.abs(e.clientY - d.startY) > 6) moved.current = true;
     let next = d.startOffset + (e.clientY - d.startY);
-    // Soft edges: the wheel stretches a little past the first and last value
     if (next > 0) next *= 0.35;
     if (next < minY) next = minY + (next - minY) * 0.35;
     y.set(next);
@@ -82,22 +102,12 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
     const first = d.samples[0];
     const last = d.samples[d.samples.length - 1];
     const dt = Math.max(1, last.t - first.t);
-    // Only keep momentum if the finger was still moving just before release
     const recent = performance.now() - last.t < 90;
     const velocityPxMs = recent ? (last.y - first.y) / dt : 0;
-    // Momentum: where the wheel would coast to, then snap to the nearest value
     const projected = y.get() + velocityPxMs * 220;
     snapTo(indexFromY(projected), velocityPxMs * 1000);
   }
 
-  function onWheel(e) {
-    if (wheelLock.current || Math.abs(e.deltaY) < 4) return;
-    wheelLock.current = true;
-    setTimeout(() => { wheelLock.current = false; }, 120);
-    snapTo(currentIndex() + Math.sign(e.deltaY));
-  }
-
-  // Tap a row to jump to it. Ignored if the finger was dragging.
   function onClick(e) {
     if (moved.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -132,13 +142,11 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
-        onWheel={onWheel}
-        onKeyDown={onKeyDown}
         onClick={onClick}
-        style={{ height: VISIBLE * ITEM, perspective: 700 }}
+        onKeyDown={onKeyDown}
+        style={{ height: VISIBLE * ITEM, perspective: 700, overscrollBehavior: "contain" }}
         className="relative mx-auto w-40 touch-none select-none overflow-hidden rounded-3xl bg-bg ring-1 ring-border focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
       >
-        {/* Highlight behind the selected row */}
         <div
           aria-hidden="true"
           style={{ top: CENTER, height: ITEM }}
@@ -147,7 +155,6 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
         {rows.map((i) => (
           <WheelRow key={i} index={i} y={y} label={min + i} selected={min + i === value} />
         ))}
-        {/* Fades at the top and bottom edges */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-bg to-transparent" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg to-transparent" />
       </motion.div>
