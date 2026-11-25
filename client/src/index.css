@@ -14,11 +14,15 @@
   --color-success: #2f7d4f;
   --color-warning: #b87412;
   --color-danger: #b93232;
-  --color-info: #2f63a0;
+  --color-info: #2f7f7a;
+  --color-teal: #2f7f7a;
+  --color-teal-soft: #d5e9e6;
 }
 
 /* Dark theme: same colors, adjusted for dark backgrounds */
 .dark {
+  --color-teal: #5fb3ac;
+  --color-teal-soft: #1f3a37;
   --color-primary: #f08a6c;
   --color-primary-hover: #ec8f74;
   --color-accent: #f2a65a;

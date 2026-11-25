@@ -27,7 +27,7 @@ export default function ServiceTiles() {
               transition={{ delay: i * 0.04 }}
             >
               <Link to={`/products?kind=SERVICE&category=${c}`} className="group flex flex-col items-center gap-2 rounded-3xl bg-surface p-4 text-center shadow-sm ring-1 ring-border transition hover:-translate-y-1 hover:shadow-lg">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/20 text-warning transition-transform group-hover:rotate-12">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-soft text-teal transition-transform group-hover:rotate-12">
                   <Icon size={22} />
                 </span>
                 <span className="text-xs font-bold sm:text-sm">{t(`categories.${c}`)}</span>
