@@ -218,7 +218,7 @@ export default function Products() {
                       <button
                         key={c}
                         onClick={() => { setCategory(c); setSearch(""); }}
-                        className="flex items-center gap-2 rounded-full bg-teal-soft px-4 py-2 text-sm font-semibold text-teal ring-1 ring-teal/30 transition hover:-translate-y-0.5 hover:shadow-md"
+                        className="flex cursor-pointer items-center gap-2 rounded-full bg-teal-soft px-4 py-2 text-sm font-semibold text-teal ring-1 ring-teal/30 transition hover:-translate-y-0.5 hover:shadow-md"
                       >
                         {Icon && <Icon size={14} aria-hidden="true" />}
                         {t(`categories.${c}`)}
@@ -227,7 +227,7 @@ export default function Products() {
                   })}
                 </div>
                 {search && (
-                  <button onClick={() => setSearch("")} className="mt-5 text-sm font-bold text-primary underline">
+                  <button onClick={() => setSearch("")} className="mt-5 cursor-pointer text-sm font-bold text-primary underline underline-offset-4 transition-colors hover:text-primary-hover">
                     {t("browse.clearSearch")}
                   </button>
                 )}
