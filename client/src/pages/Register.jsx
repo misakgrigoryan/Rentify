@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
+import AgeWheel from "../components/ui/AgeWheel.jsx";
 import AuthBackdrop from "../components/ui/AuthBackdrop.jsx";
 import useAuth from "../hooks/useAuth.js";
 
@@ -16,12 +17,14 @@ export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
-  const [consent, setConsent] = useState({ terms: false, privacy: false, adult: false });
+  const [age, setAge] = useState(25); // used only in the browser, never sent or stored
+  const [terms, setTerms] = useState(false);
+  const [privacy, setPrivacy] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  const allChecked = consent.terms && consent.privacy && consent.adult;
+  const isAdult = age >= 18;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,7 +33,11 @@ export default function Register() {
       setError(t("auth.phoneInvalid"));
       return;
     }
-    if (!allChecked) {
+    if (!isAdult) {
+      setError(t("auth.mustBeAdult"));
+      return;
+    }
+    if (!terms || !privacy) {
       setError(t("auth.consentRequired"));
       return;
     }
@@ -61,25 +68,30 @@ export default function Register() {
             <UserPlus size={26} aria-hidden="true" />
           </span>
           <h1 className="mt-4 text-center text-2xl font-extrabold">{t("auth.registerTitle")}</h1>
-          <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
+          <form className="mt-6 flex flex-col gap-5" onSubmit={handleSubmit}>
             <Input id="name" name="name" label={t("auth.fullName")} value={form.name} onChange={handleChange} required />
             <Input id="email" name="email" label={t("auth.email")} type="email" value={form.email} onChange={handleChange} required />
             <Input id="phone" name="phone" label={t("auth.phone")} type="tel" placeholder="+374 77 123 456" value={form.phone} onChange={handleChange} />
             <Input id="password" name="password" label={t("auth.passwordHint")} type="password" value={form.password} onChange={handleChange} required />
 
+            <AgeWheel
+              label={t("auth.ageLabel")}
+              hint={t("auth.ageHint")}
+              value={age}
+              onChange={setAge}
+              min={1}
+              max={100}
+            />
+
             <fieldset className="grid gap-3 rounded-2xl bg-bg p-4">
               <legend className="sr-only">{t("auth.consentLegend")}</legend>
               <label className="flex items-start gap-3 text-sm leading-relaxed">
-                <input type="checkbox" className={checkClass} checked={consent.terms} onChange={(e) => setConsent({ ...consent, terms: e.target.checked })} />
+                <input type="checkbox" className={checkClass} checked={terms} onChange={(e) => setTerms(e.target.checked)} />
                 <span>{t("auth.agreeTerms")} <Link to="/terms" className="font-semibold text-primary underline">{t("terms.link")}</Link></span>
               </label>
               <label className="flex items-start gap-3 text-sm leading-relaxed">
-                <input type="checkbox" className={checkClass} checked={consent.privacy} onChange={(e) => setConsent({ ...consent, privacy: e.target.checked })} />
+                <input type="checkbox" className={checkClass} checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} />
                 <span>{t("auth.agreePrivacy")} <Link to="/privacy" className="font-semibold text-primary underline">{t("privacy.link")}</Link></span>
-              </label>
-              <label className="flex items-start gap-3 text-sm leading-relaxed">
-                <input type="checkbox" className={checkClass} checked={consent.adult} onChange={(e) => setConsent({ ...consent, adult: e.target.checked })} />
-                <span>{t("auth.confirmAdult")}</span>
               </label>
             </fieldset>
 
