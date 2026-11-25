@@ -26,7 +26,7 @@ export default function HeroCarousel({ listings }) {
   const prev = () => setIndex((i) => (i - 1 + count) % count);
 
   const arrowClass =
-    "absolute top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-primary shadow-lg transition-transform hover:scale-110 active:scale-95";
+    "absolute top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-surface/90 text-primary shadow-lg transition-transform hover:scale-110 active:scale-95";
 
   return (
     <div className="relative mx-auto w-full max-w-sm">
@@ -84,7 +84,7 @@ export default function HeroCarousel({ listings }) {
             key={l.id}
             aria-label={`${i + 1}`}
             onClick={() => setIndex(i)}
-            className={`h-2.5 rounded-full transition-all duration-300 ${i === current ? "w-8 bg-white" : "w-2.5 bg-white/50"}`}
+            className={`h-2.5 rounded-full transition-all duration-300 ${i === current ? "w-8 bg-surface" : "w-2.5 bg-surface/50"}`}
           />
         ))}
       </div>

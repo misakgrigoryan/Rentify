@@ -58,7 +58,7 @@ export default function Home() {
           aria-hidden="true"
           animate={{ x: [0, 80, 0], y: [0, -60, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="pointer-events-none absolute -bottom-32 left-0 h-96 w-96 rounded-full bg-white/15 blur-3xl"
+          className="pointer-events-none absolute -bottom-32 left-0 h-96 w-96 rounded-full bg-surface/15 blur-3xl"
         />
 
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 md:grid-cols-2">
@@ -66,7 +66,7 @@ export default function Home() {
             <motion.span
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest backdrop-blur"
+              className="inline-flex items-center gap-2 rounded-full bg-surface/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest backdrop-blur"
             >
               <Sparkles size={14} aria-hidden="true" /> Rentify
             </motion.span>
@@ -137,7 +137,7 @@ export default function Home() {
                 <Link to="/products" className="group relative block overflow-hidden rounded-[2rem] bg-surface p-8 shadow-sm ring-1 ring-border transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/25">
                   <span className="absolute inset-0 origin-bottom scale-y-0 bg-gradient-to-br from-primary to-[#6e2c1a] transition-transform duration-500 group-hover:scale-y-100" aria-hidden="true" />
                   <span className="relative flex flex-col gap-6 transition-colors duration-500 group-hover:text-white">
-                    <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:rotate-12 group-hover:bg-white/20 group-hover:text-white">
+                    <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-all duration-500 group-hover:rotate-12 group-hover:bg-surface/20 group-hover:text-white">
                       <Icon size={30} aria-hidden="true" />
                     </span>
                     <span className="text-xl font-extrabold">{t(`categories.${c}`)}</span>

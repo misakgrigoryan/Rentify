@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="relative mx-auto max-w-6xl px-4 py-12">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/15">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-surface/15">
               <KeyRound size={22} aria-hidden="true" />
             </span>
             <div>

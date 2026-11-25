@@ -56,10 +56,10 @@ export default function Testimonials() {
 
         {reviews.length > 1 && (
           <div className="mt-8 flex items-center gap-3">
-            <button aria-label="Previous" onClick={() => go(-1)} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 hover:bg-white/25">
+            <button aria-label="Previous" onClick={() => go(-1)} className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/15 hover:bg-surface/25">
               <ChevronLeft size={18} />
             </button>
-            <button aria-label="Next" onClick={() => go(1)} className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 hover:bg-white/25">
+            <button aria-label="Next" onClick={() => go(1)} className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/15 hover:bg-surface/25">
               <ChevronRight size={18} />
             </button>
           </div>

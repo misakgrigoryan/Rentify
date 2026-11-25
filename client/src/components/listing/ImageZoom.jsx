@@ -43,7 +43,7 @@ export default function ImageZoom({ src, alt, layoutId }) {
     };
   }, [open]);
 
-  const btn = "flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25 disabled:opacity-40";
+  const btn = "flex h-11 w-11 items-center justify-center rounded-full bg-surface/15 text-white transition hover:bg-surface/25 disabled:opacity-40";
 
   return (
     <>
@@ -73,7 +73,7 @@ export default function ImageZoom({ src, alt, layoutId }) {
               type="button"
               onClick={close}
               aria-label="Close"
-              className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25"
+              className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-surface/15 text-white hover:bg-surface/25"
             >
               <X size={20} />
             </button>
@@ -85,7 +85,7 @@ export default function ImageZoom({ src, alt, layoutId }) {
                 onClick={(e) => e.stopPropagation()}
                 animate={{ scale }}
                 transition={{ type: "spring", stiffness: 260, damping: 26 }}
-                className="max-h-[80vh] max-w-full select-none rounded-2xl bg-white object-contain p-4"
+                className="max-h-[80vh] max-w-full select-none rounded-2xl bg-surface object-contain p-4"
                 draggable={false}
               />
             </div>
