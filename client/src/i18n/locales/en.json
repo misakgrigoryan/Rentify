@@ -479,23 +479,5 @@
   },
   "a11y": {
     "skip": "Skip to content"
-  },
-  "licenses": {
-    "link": "Licenses and credits",
-    "title": "Licenses and credits",
-    "updated": "Last updated: November 2026",
-    "intro": "This page lists the licenses for the fonts, icons, and software used on Rentify.",
-    "fonts": {
-      "title": "Fonts",
-      "text": "Noto Sans and Noto Sans Armenian, by Google and the Noto Project, are licensed under the SIL Open Font License 1.1. They are hosted on this site, so visitors' browsers do not contact Google to load them."
-    },
-    "images": {
-      "title": "Photos and icons",
-      "text": "The demo listing photos are for testing only and will be replaced before public use. Photos uploaded by users are the responsibility of the user who uploads them. Icons come from the Lucide open-source icon set under the ISC license."
-    },
-    "code": {
-      "title": "Software",
-      "text": "This site is built with open-source libraries, including React, Vite, Tailwind CSS, Framer Motion, and Lucide, each under its own permissive license."
-    }
   }
 }
