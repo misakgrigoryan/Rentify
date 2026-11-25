@@ -11,7 +11,6 @@ export default function Footer() {
     { to: "/refund", label: t("refund.link") },
     { to: "/cookies", label: t("cookies.link") },
     { to: "/data-request", label: t("dataRequest.link") },
-    { to: "/licenses", label: t("licenses.link") },
   ];
   return (
     <footer className="relative mt-16 overflow-hidden bg-gradient-to-br from-primary via-primary to-[#8f3b25] text-white">
