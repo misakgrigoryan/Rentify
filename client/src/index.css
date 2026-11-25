@@ -19,14 +19,14 @@
 
 /* Dark theme: same colors, adjusted for dark backgrounds */
 .dark {
-  --color-primary: #e07a5c;
+  --color-primary: #f08a6c;
   --color-primary-hover: #ec8f74;
   --color-accent: #f2a65a;
   --color-bg: #140d0a;
   --color-surface: #22170f;
   --color-text: #f7e9e0;
-  --color-muted: #b49a8e;
-  --color-border: #3a2a22;
+  --color-muted: #c7afa4;
+  --color-border: #4a3830;
   --color-success: #6fbf88;
   --color-warning: #e7a94a;
   --color-danger: #ef6b6b;
