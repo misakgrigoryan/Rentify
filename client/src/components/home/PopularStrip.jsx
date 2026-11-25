@@ -21,7 +21,7 @@ export default function PopularStrip({ listings }) {
     <section className="mx-auto max-w-6xl px-4 pt-16">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/25 px-3 py-1 text-xs font-bold uppercase tracking-wider text-warning">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-soft px-3 py-1 text-xs font-bold uppercase tracking-wider text-teal">
             <Flame size={12} /> {extra("popular", lang)}
           </span>
           <p className="mt-2 text-sm text-muted">{extra("popularSub", lang)}</p>

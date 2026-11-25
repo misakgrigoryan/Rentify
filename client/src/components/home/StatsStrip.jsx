@@ -55,7 +55,7 @@ export default function StatsStrip({ listings }) {
             transition={{ delay: i * 0.1 }}
             className="rounded-3xl bg-surface p-6 text-center shadow-sm ring-1 ring-border"
           >
-            <p className="text-4xl font-extrabold text-primary">
+            <p className="text-4xl font-extrabold text-teal">
               <CountUp to={s.value} />{s.suffix || ""}
             </p>
             <p className="mt-1 text-sm font-semibold text-muted">{s.label}</p>

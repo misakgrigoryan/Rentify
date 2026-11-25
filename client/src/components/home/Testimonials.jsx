@@ -30,7 +30,7 @@ export default function Testimonials() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 pt-16">
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-soft px-3 py-1 text-xs font-bold uppercase tracking-wider text-teal">
         <Star size={12} /> Reviews
       </span>
       <div className="relative mt-6 overflow-hidden rounded-3xl bg-primary p-8 text-white shadow-xl md:p-12">

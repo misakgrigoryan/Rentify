@@ -77,6 +77,7 @@ export default function ListingCard({ listing, index = 0 }) {
             </span>
 
             <h3 className="font-bold text-text">{title}</h3>
+            <span aria-hidden="true" className="mt-2 block h-0.5 w-10 rounded-full bg-teal" />
             <p className="mt-1 flex items-center gap-1 text-sm text-muted">
               <MapPin size={14} aria-hidden="true" /> {listing.location}
               <span className="mx-1">·</span>

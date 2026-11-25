@@ -117,7 +117,7 @@ export default function Products() {
           <button
             key={value}
             onClick={() => switchKind(value)}
-            className={`relative flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition-colors ${kind === value ? "text-white" : "text-muted hover:text-text"}`}
+            className={`relative flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold transition-colors ${kind === value ? "text-white" : "text-muted hover:text-teal"}`}
           >
             {kind === value && (
               <motion.span layoutId="kind-switch" className="absolute inset-0 rounded-xl bg-primary" transition={{ type: "spring", stiffness: 350, damping: 30 }} />
