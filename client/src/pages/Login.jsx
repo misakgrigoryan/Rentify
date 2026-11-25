@@ -48,7 +48,7 @@ export default function Login() {
           <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
             <Input id="email" name="email" label={t("auth.email")} type="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required />
             <Input id="password" name="password" label={t("auth.password")} type="password" value={form.password} onChange={handleChange} required />
-            {error && <motion.p initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} className="rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</motion.p>}
+            {error && <motion.p role="alert" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} className="rounded-2xl bg-danger/10 p-3 text-sm text-danger">{error}</motion.p>}
             <Button type="submit" className="w-full" loading={submitting}>{t("auth.loginButton")}</Button>
           </form>
           <p className="mt-5 text-center text-sm text-muted">
