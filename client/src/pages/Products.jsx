@@ -104,12 +104,13 @@ export default function Products() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
-      <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-extrabold">
-        {t("browse.title")}
-      </motion.h1>
+      <div className="sticky top-16 z-30 -mx-4 bg-bg/90 px-4 pb-4 pt-2 backdrop-blur-xl">
+        <motion.h1 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-4xl font-extrabold">
+          {t("browse.title")}
+        </motion.h1>
 
-      {/* Items / Services switch */}
-      <div className="mt-6 inline-flex gap-1 rounded-2xl bg-surface p-1.5 shadow-sm ring-1 ring-border">
+        {/* Items / Services switch */}
+        <div className="mt-4 inline-flex gap-1 rounded-2xl bg-surface p-1.5 shadow-sm ring-1 ring-border">
         {[
           { value: "ITEM", label: t("browse.tabItems"), Icon: Package },
           { value: "SERVICE", label: t("browse.tabServices"), Icon: Briefcase },
@@ -125,6 +126,7 @@ export default function Products() {
             <span className="relative flex items-center gap-2"><Icon size={16} /> {label}</span>
           </button>
         ))}
+      </div>
       </div>
 
       {/* Category or profession pills */}
