@@ -5,12 +5,12 @@
   --font-sans: "Noto Sans", "Noto Sans Armenian", system-ui, sans-serif;
   --color-primary: #b04c31;
   --color-primary-hover: #8f3b25;
-  --color-accent: #f2a65a;
-  --color-bg: #f6f6f4;
-  --color-surface: #ffffff;
-  --color-text: #1a1816;
-  --color-muted: #6b6560;
-  --color-border: #e6e3de;
+  --color-accent: #e8a04a;
+  --color-bg: #ede3d6;
+  --color-surface: #f9f4ec;
+  --color-text: #2a1d16;
+  --color-muted: #7a6558;
+  --color-border: #d9c9b6;
   --color-success: #2f7d4f;
   --color-warning: #b87412;
   --color-danger: #b93232;
