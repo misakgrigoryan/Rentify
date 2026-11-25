@@ -7,7 +7,7 @@ const MAX = 4;
 const STEP = 0.5;
 
 // Shows a photo that opens full screen, where it can be zoomed in and out
-export default function ImageZoom({ src, alt }) {
+export default function ImageZoom({ src, alt, layoutId }) {
   const [open, setOpen] = useState(false);
   const [scale, setScale] = useState(1);
 
@@ -53,7 +53,7 @@ export default function ImageZoom({ src, alt }) {
         aria-label="Zoom"
         className="group relative h-full w-full cursor-zoom-in"
       >
-        <img src={src} alt={alt} className="h-full w-full object-contain p-4" />
+        <motion.img layoutId={layoutId} src={src} alt={alt} className="h-full w-full object-contain p-4" />
         <span className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-surface/90 text-primary shadow-md">
           <Maximize2 size={16} />
         </span>

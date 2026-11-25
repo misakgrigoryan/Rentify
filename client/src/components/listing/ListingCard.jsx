@@ -50,7 +50,8 @@ export default function ListingCard({ listing, index = 0 }) {
         >
           <div className="relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-accent/30 via-bg to-primary/10">
             {image ? (
-              <img
+              <motion.img
+                layoutId={`listing-photo-${listing.id}`}
                 src={image}
                 alt={title}
                 className="h-full w-full object-contain p-3 transition-transform duration-700 ease-out group-hover:scale-110"
