@@ -452,5 +452,21 @@
     "more": "Cookie policy",
     "accept": "Accept necessary cookies",
     "close": "Close"
+  },
+  "dataRequest": {
+    "link": "Data request",
+    "title": "Data request",
+    "intro": "Ask us to show, correct, or delete the personal data we hold about you. You do not need an account.",
+    "name": "Name (optional)",
+    "email": "Your email address",
+    "what": "What do you want us to do?",
+    "details": "Details (optional)",
+    "send": "Send request",
+    "sent": "Thank you. We received your request and will reply by email.",
+    "types": {
+      "ACCESS": "Show me my data",
+      "CORRECT": "Correct my data",
+      "DELETE": "Delete my data"
+    }
   }
 }
