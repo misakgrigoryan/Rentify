@@ -82,7 +82,9 @@
     "tabServices": "Services",
     "profession": "Profession",
     "allProfessions": "All professions",
-    "servicesCount": "{{count}} services found"
+    "servicesCount": "{{count}} services found",
+    "tryThese": "Try a category or profession",
+    "clearSearch": "Clear search"
   },
   "listing": {
     "listedBy": "Listed by",

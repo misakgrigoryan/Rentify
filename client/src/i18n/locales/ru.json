@@ -82,7 +82,9 @@
     "tabServices": "Услуги",
     "profession": "Специальность",
     "allProfessions": "Все специальности",
-    "servicesCount": "Найдено услуг: {{count}}"
+    "servicesCount": "Найдено услуг: {{count}}",
+    "tryThese": "Попробуйте категорию или специальность",
+    "clearSearch": "Очистить поиск"
   },
   "listing": {
     "listedBy": "Автор:",

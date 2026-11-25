@@ -207,9 +207,32 @@ export default function Products() {
               {Array.from({ length: 6 }).map((_, i) => <ListingSkeleton key={i} />)}
             </div>
           ) : visible.length === 0 ? (
-            <motion.p initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-3xl bg-surface p-10 text-center text-muted shadow-sm ring-1 ring-border">
-              {t("browse.noMatch")}
-            </motion.p>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="rounded-3xl bg-surface p-10 text-center shadow-sm ring-1 ring-border">
+              <p className="text-muted">{t("browse.noMatch")}</p>
+              <div className="mt-6">
+                <p className="text-sm font-semibold text-muted">{t("browse.tryThese")}</p>
+                <div className="mt-3 flex flex-wrap justify-center gap-2">
+                  {pills.map((c) => {
+                    const Icon = icons[c];
+                    return (
+                      <button
+                        key={c}
+                        onClick={() => { setCategory(c); setSearch(""); }}
+                        className="flex items-center gap-2 rounded-full bg-teal-soft px-4 py-2 text-sm font-semibold text-teal ring-1 ring-teal/30 transition hover:-translate-y-0.5 hover:shadow-md"
+                      >
+                        {Icon && <Icon size={14} aria-hidden="true" />}
+                        {t(`categories.${c}`)}
+                      </button>
+                    );
+                  })}
+                </div>
+                {search && (
+                  <button onClick={() => setSearch("")} className="mt-5 text-sm font-bold text-primary underline">
+                    {t("browse.clearSearch")}
+                  </button>
+                )}
+              </div>
+            </motion.div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {visible.map((listing, i) => (

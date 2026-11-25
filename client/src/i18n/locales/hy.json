@@ -82,7 +82,9 @@
     "tabServices": "Ծառայություններ",
     "profession": "Մասնագիտություն",
     "allProfessions": "Բոլոր մասնագիտությունները",
-    "servicesCount": "Գտնվել է {{count}} ծառայություն"
+    "servicesCount": "Գտնվել է {{count}} ծառայություն",
+    "tryThese": "Փորձեք կատեգորիա կամ մասնագիտություն",
+    "clearSearch": "Մաքրել որոնումը"
   },
   "listing": {
     "listedBy": "Հեղինակ՝",
