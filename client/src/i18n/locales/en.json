@@ -468,5 +468,8 @@
       "CORRECT": "Correct my data",
       "DELETE": "Delete my data"
     }
+  },
+  "a11y": {
+    "skip": "Skip to content"
   }
 }

@@ -9,7 +9,7 @@
   --color-bg: #fdf7f2;
   --color-surface: #ffffff;
   --color-text: #2e1b14;
-  --color-muted: #8a7068;
+  --color-muted: #7a5f56;
   --color-border: #f0e2d6;
   --color-success: #3f8f5b;
   --color-warning: #c98a1b;
@@ -50,3 +50,10 @@ body {
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 999px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }
+
+/* Keyboard focus: a clear outline on every link, button and field */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
