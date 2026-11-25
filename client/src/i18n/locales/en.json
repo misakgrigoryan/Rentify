@@ -482,5 +482,14 @@
   },
   "a11y": {
     "skip": "Skip to content"
+  },
+  "mobileBar": {
+    "book": "Book now"
+  },
+  "wheels": {
+    "start": "When do you start?",
+    "duration": "How long?",
+    "day": "Day",
+    "hour": "Hour"
   }
 }

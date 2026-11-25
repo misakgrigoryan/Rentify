@@ -8,6 +8,8 @@ import Input from "../components/ui/Input.jsx";
 import Card from "../components/ui/Card.jsx";
 import FavoriteButton from "../components/listing/FavoriteButton.jsx";
 import ReportButton from "../components/listing/ReportButton.jsx";
+import MobileBookBar from "../components/listing/MobileBookBar.jsx";
+import BookingWheels from "../components/listing/BookingWheels.jsx";
 import ShareButton from "../components/listing/ShareButton.jsx";
 import PriceQuote from "../components/listing/PriceQuote.jsx";
 import ImageZoom from "../components/listing/ImageZoom.jsx";
@@ -84,6 +86,7 @@ export default function ProductDetails() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
       <BackButton />
+      <MobileBookBar listing={listing} user={user} />
       <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr]">
         <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="flex h-80 items-center justify-center overflow-hidden rounded-3xl bg-accent/20 shadow-sm ring-1 ring-border sm:h-[420px]">
           {listing.imageUrls?.[0] ? (
@@ -123,6 +126,9 @@ export default function ProductDetails() {
               <Card>
                 <form onSubmit={handleBook} className="flex flex-col gap-3">
                   <h2 className="flex items-center gap-2 font-bold"><CalendarPlus size={18} className="text-primary" /> {t("product.bookingTitle")}</h2>
+<div className="col-span-full">
+  <BookingWheels listing={listing} startDate={dates.startDate} endDate={dates.endDate} onChange={(s, e) => setDates({ ...dates, startDate: s, endDate: e })} />
+</div>
                   <Input id="startDate" name="startDate" label={t("product.from")} type="datetime-local" value={dates.startDate} onChange={(e) => setDates({ ...dates, startDate: e.target.value })} required />
                   <Input id="endDate" name="endDate" label={t("product.to")} type="datetime-local" value={dates.endDate} onChange={(e) => setDates({ ...dates, endDate: e.target.value })} required />
                   <PriceQuote listing={listing} start={dates.startDate} end={dates.endDate} />

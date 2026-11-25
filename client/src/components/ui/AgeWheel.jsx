@@ -6,7 +6,7 @@ const VISIBLE = 5;               // rows visible at once
 const CENTER = Math.floor(VISIBLE / 2) * ITEM;
 
 // One row. Its position, tilt, fade, scale and blur depend on its distance from the centre.
-function WheelRow({ index, y, label, selected }) {
+function WheelRow({ index, y, label, selected, textClass }) {
   const d = useTransform(y, (v) => index + v / ITEM);
   const translateY = useTransform(y, (v) => index * ITEM + v + CENTER);
   const rotateX = useTransform(d, (x) => Math.max(-65, Math.min(65, -x * 26)));
@@ -21,7 +21,7 @@ function WheelRow({ index, y, label, selected }) {
       className="absolute inset-x-0 top-0 flex items-center justify-center"
     >
       <span
-        className={`h-12 w-full text-center text-2xl leading-[3rem] tabular-nums transition-colors duration-300 ${
+        className={`h-12 w-full px-2 text-center leading-[3rem] tabular-nums transition-colors duration-300 ${textClass} ${
           selected ? "font-black text-primary" : "font-semibold text-muted"
         }`}
       >
@@ -31,14 +31,31 @@ function WheelRow({ index, y, label, selected }) {
   );
 }
 
-export default function AgeWheel({ value, onChange, min = 1, max = 100, label, hint }) {
-  const count = max - min + 1;
-  const y = useMotionValue(-(value - min) * ITEM);
+// Props: value, onChange, and either min/max (numbers) or items ([{ value, label }]).
+export default function AgeWheel({
+  value, onChange, min = 1, max = 100, items, label, hint,
+  textClass = "text-2xl", widthClass = "w-40",
+}) {
+  const list = items || Array.from({ length: max - min + 1 }, (_, i) => ({ value: min + i, label: min + i }));
+  const count = list.length;
+  const found = list.findIndex((item) => item.value === value);
+  const selectedIndex = found < 0 ? 0 : found;
+
+  const y = useMotionValue(-selectedIndex * ITEM);
   const containerRef = useRef(null);
   const drag = useRef(null);
   const moved = useRef(false);
   const wheelLock = useRef(false);
   const minY = -(count - 1) * ITEM;
+
+  // Follow the value when it changes from outside (for example, from the date inputs)
+  useEffect(() => {
+    if (drag.current) return;
+    const target = -selectedIndex * ITEM;
+    if (Math.abs(y.get() - target) > 0.5) {
+      animate(y, target, { type: "spring", stiffness: 260, damping: 28 });
+    }
+  }, [selectedIndex, y]);
 
   const indexFromY = (v) => Math.min(count - 1, Math.max(0, Math.round(-v / ITEM)));
   const currentIndex = () => indexFromY(y.get());
@@ -46,10 +63,10 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
   function snapTo(index, velocity = 0) {
     const target = Math.min(count - 1, Math.max(0, index));
     animate(y, -target * ITEM, { type: "spring", stiffness: 260, damping: 28, velocity });
-    if (min + target !== value) onChange(min + target);
+    if (list[target].value !== value) onChange(list[target].value);
   }
 
-  // Keep the latest version of the handler so the native listener never uses old values
+  // Latest handler, used by the native wheel listener
   const wheelHandler = useRef(null);
   wheelHandler.current = (e) => {
     if (Math.abs(e.deltaY) < 4) return;
@@ -59,7 +76,7 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
     snapTo(currentIndex() + Math.sign(e.deltaY));
   };
 
-  // Native listener with passive: false, so the page scroll can be blocked while over the wheel
+  // Native listener so the page does not scroll while the pointer is over the wheel
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -132,9 +149,7 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
         role="spinbutton"
         tabIndex={0}
         aria-label={label}
-        aria-valuemin={min}
-        aria-valuemax={max}
-        aria-valuenow={value}
+        aria-valuetext={list[selectedIndex]?.label}
         initial={{ opacity: 0, filter: "blur(10px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -145,7 +160,7 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
         onClick={onClick}
         onKeyDown={onKeyDown}
         style={{ height: VISIBLE * ITEM, perspective: 700, overscrollBehavior: "contain" }}
-        className="relative mx-auto w-40 touch-none select-none overflow-hidden rounded-3xl bg-bg ring-1 ring-border focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+        className={`relative mx-auto ${widthClass} touch-none select-none overflow-hidden rounded-3xl bg-bg ring-1 ring-border focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30`}
       >
         <div
           aria-hidden="true"
@@ -153,7 +168,14 @@ export default function AgeWheel({ value, onChange, min = 1, max = 100, label, h
           className="pointer-events-none absolute inset-x-3 rounded-2xl bg-primary/10 ring-1 ring-primary/30"
         />
         {rows.map((i) => (
-          <WheelRow key={i} index={i} y={y} label={min + i} selected={min + i === value} />
+          <WheelRow
+            key={i}
+            index={i}
+            y={y}
+            label={list[i].label}
+            selected={list[i].value === value}
+            textClass={textClass}
+          />
         ))}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-bg to-transparent" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg to-transparent" />
