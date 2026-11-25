@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ScrollText } from "lucide-react";
 import PageShell from "../components/ui/PageShell.jsx";
 
-const SECTIONS = ["use", "listings", "bookings", "services", "payments", "conduct", "liability", "changes"];
+const SECTIONS = ["use", "listings", "bookings", "services", "payments", "conduct", "reviews", "liability", "changes"];
 
 export default function Terms() {
   const { t } = useTranslation();

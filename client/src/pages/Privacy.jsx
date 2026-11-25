@@ -4,7 +4,7 @@ import { ShieldCheck } from "lucide-react";
 import PageShell from "../components/ui/PageShell.jsx";
 
 // Sections are read from the translation files, so each language gets the same structure
-const SECTIONS = ["collect", "use", "share", "photos", "security", "rights", "contact"];
+const SECTIONS = ["collect", "use", "share", "photos", "security", "rights", "vendors", "contact"];
 
 export default function Privacy() {
   const { t } = useTranslation();

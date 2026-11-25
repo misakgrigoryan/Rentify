@@ -340,6 +340,10 @@
     "contact": {
       "title": "Contact",
       "text": "For questions about your data or to request help, contact the site owner through the Rentify project page on GitHub."
+    },
+    "vendors": {
+      "title": "Service providers we use",
+      "text": "Vercel (website hosting), Render (API hosting), Neon (database), Resend (sending emails), Cloudinary (photo storage), and GitHub (source code). Each one receives only the data it needs for its part of the service."
     }
   },
   "notif": {
@@ -383,6 +387,10 @@
     "changes": {
       "title": "Changes to these terms",
       "text": "We may update these terms from time to time. The date at the top shows the latest version. Continuing to use the site after a change means you accept the updated terms."
+    },
+    "reviews": {
+      "title": "Reviews",
+      "text": "A renter can leave a review only after a booking is completed, and only once per booking. A review must describe a real rental or service. Fake, paid, or abusive reviews are removed and may lead to a ban."
     }
   },
   "report": {
@@ -471,5 +479,23 @@
   },
   "a11y": {
     "skip": "Skip to content"
+  },
+  "licenses": {
+    "link": "Licenses and credits",
+    "title": "Licenses and credits",
+    "updated": "Last updated: November 2026",
+    "intro": "This page lists the licenses for the fonts, icons, and software used on Rentify.",
+    "fonts": {
+      "title": "Fonts",
+      "text": "Noto Sans and Noto Sans Armenian, by Google and the Noto Project, are licensed under the SIL Open Font License 1.1. They are hosted on this site, so visitors' browsers do not contact Google to load them."
+    },
+    "images": {
+      "title": "Photos and icons",
+      "text": "The demo listing photos are for testing only and will be replaced before public use. Photos uploaded by users are the responsibility of the user who uploads them. Icons come from the Lucide open-source icon set under the ISC license."
+    },
+    "code": {
+      "title": "Software",
+      "text": "This site is built with open-source libraries, including React, Vite, Tailwind CSS, Framer Motion, and Lucide, each under its own permissive license."
+    }
   }
 }
